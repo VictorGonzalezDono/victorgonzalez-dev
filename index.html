@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Growth Engineer & Data Scientist — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet" />
+
+<style>
+  /* ── RESET & BASE ──────────────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #0a0f1e;
+    --surface:   #0f172a;
+    --card:      #111827;
+    --border:    rgba(255,255,255,0.06);
+    --border-h:  rgba(15,118,110,0.35);
+    --text:      #f1f5f9;
+    --muted:     #64748b;
+    --accent:    #0f766e;
+    --accent-l:  #14b8a6;
+    --accent-d:  #0d5c56;
+    --serif:     'DM Serif Display', Georgia, serif;
+    --sans:      'DM Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* ── CUSTOM CURSOR ─────────────────────────────────────────── */
+  #cursor-dot {
+    width: 6px; height: 6px;
+    background: var(--accent-l);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9999;
+    transition: transform 0.08s ease, opacity 0.3s;
+    transform: translate(-50%, -50%);
+  }
+  #cursor-ring {
+    width: 30px; height: 30px;
+    border: 1px solid rgba(20,184,166,0.4);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9998;
+    transition: transform 0.18s ease, width 0.2s, height 0.2s, border-color 0.2s;
+    transform: translate(-50%, -50%);
+  }
+  body:hover #cursor-dot { opacity: 1; }
+
+  /* ── NOISE OVERLAY ─────────────────────────────────────────── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+    opacity: 0.025;
+    pointer-events: none; z-index: 1000;
+  }
+
+  /* ── NAV ───────────────────────────────────────────────────── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 48px;
+    height: 64px;
+    background: rgba(10,15,30,0.7);
+    backdrop-filter: blur(20px) saturate(1.4);
+    border-bottom: 1px solid var(--border);
+    transition: background 0.3s;
+  }
+  .nav-logo {
+    font-family: var(--serif);
+    font-size: 1.05rem;
+    letter-spacing: 0.02em;
+    color: var(--text);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--accent-l); }
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a {
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent-l); }
+  .nav-cta {
+    font-size: 0.78rem; font-weight: 500;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--accent-l);
+    border: 1px solid rgba(20,184,166,0.3);
+    padding: 7px 20px; border-radius: 3px;
+    text-decoration: none;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+  }
+  .nav-cta:hover {
+    background: rgba(20,184,166,0.08);
+    border-color: var(--accent-l);
+    color: #fff;
+  }
+  .nav-mobile-btn { display: none; background: none; border: none; cursor: none; }
+
+  /* ── HERO ──────────────────────────────────────────────────── */
+  #hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 120px 48px 80px;
+    overflow: hidden;
+  }
+
+  /* Gradient orbs */
+  .orb {
+    position: absolute; border-radius: 50%;
+    filter: blur(120px); pointer-events: none; z-index: 0;
+  }
+  .orb-1 {
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(15,118,110,0.18) 0%, transparent 70%);
+    top: -200px; right: -100px;
+    animation: float1 18s ease-in-out infinite;
+  }
+  .orb-2 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(20,184,166,0.08) 0%, transparent 70%);
+    bottom: 0px; left: 10%;
+    animation: float2 22s ease-in-out infinite;
+  }
+  @keyframes float1 {
+    0%,100% { transform: translate(0,0) scale(1); }
+    50%      { transform: translate(-40px, 60px) scale(1.08); }
+  }
+  @keyframes float2 {
+    0%,100% { transform: translate(0,0); }
+    50%      { transform: translate(30px,-50px); }
+  }
+
+  /* Grid lines */
+  .grid-lines {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.024) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.024) 1px, transparent 1px);
+    background-size: 72px 72px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+  }
+
+  .hero-inner {
+    position: relative; z-index: 2;
+    max-width: 900px;
+  }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    border: 1px solid rgba(20,184,166,0.25);
+    background: rgba(20,184,166,0.05);
+    border-radius: 100px;
+    padding: 5px 14px 5px 10px;
+    margin-bottom: 40px;
+    opacity: 0; animation: fadeUp 0.8s 0.1s forwards;
+  }
+  .badge-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent-l);
+    box-shadow: 0 0 8px var(--accent-l);
+    animation: pulse 2.5s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity:1; box-shadow: 0 0 8px var(--accent-l); }
+    50%      { opacity:0.5; box-shadow: 0 0 16px var(--accent-l); }
+  }
+  .badge-text {
+    font-size: 0.72rem; font-weight: 500;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--accent-l);
+  }
+
+  .hero-title {
+    font-family: var(--serif);
+    font-size: clamp(2.6rem, 6vw, 5rem);
+    font-weight: 400;
+    line-height: 1.06;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    margin-bottom: 28px;
+    opacity: 0; animation: fadeUp 0.9s 0.2s forwards;
+  }
+  .hero-title em {
+    font-style: italic;
+    color: var(--accent-l);
+    background: linear-gradient(135deg, #0f766e, #14b8a6, #5eead4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: clamp(0.95rem, 1.8vw, 1.1rem);
+    font-weight: 300;
+    line-height: 1.75;
+    color: var(--muted);
+    max-width: 640px;
+    margin-bottom: 52px;
+    opacity: 0; animation: fadeUp 0.9s 0.35s forwards;
+  }
+  .hero-sub strong { color: rgba(241,245,249,0.75); font-weight: 400; }
+
+  .hero-actions {
+    display: flex; gap: 16px; flex-wrap: wrap;
+    opacity: 0; animation: fadeUp 0.9s 0.5s forwards;
+  }
+
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--accent);
+    color: #fff;
+    padding: 14px 28px;
+    border-radius: 4px;
+    font-size: 0.82rem; font-weight: 500;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid transparent;
+    transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+    cursor: none;
+  }
+  .btn-primary:hover {
+    background: #0d6b63;
+    box-shadow: 0 0 30px rgba(15,118,110,0.4);
+    transform: translateY(-1px);
+  }
+  .btn-primary svg { transition: transform 0.2s; }
+  .btn-primary:hover svg { transform: translateY(2px); }
+
+  .btn-ghost {
+    display: inline-flex; align-items: center; gap: 8px;
+    color: var(--muted);
+    padding: 14px 24px;
+    border-radius: 4px;
+    font-size: 0.82rem; font-weight: 500;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+    cursor: none;
+  }
+  .btn-ghost:hover { color: var(--text); border-color: rgba(255,255,255,0.12); background: rgba(255,255,255,0.03); }
+
+  .hero-metrics {
+    position: absolute; right: 48px; bottom: 80px; z-index: 2;
+    display: flex; flex-direction: column; gap: 2px;
+    opacity: 0; animation: fadeIn 1s 0.8s forwards;
+  }
+  .metric-item {
+    display: flex; align-items: baseline; gap: 8px;
+    padding: 10px 20px;
+    background: rgba(255,255,255,0.025);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    backdrop-filter: blur(10px);
+  }
+  .metric-item:first-child { border-color: rgba(20,184,166,0.15); background: rgba(20,184,166,0.04); }
+  .metric-num { font-family: var(--serif); font-size: 1.6rem; color: var(--text); }
+  .metric-label { font-size: 0.7rem; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; } to { opacity: 1; }
+  }
+
+  /* ── SCROLL INDICATOR ──────────────────────────────────────── */
+  .scroll-hint {
+    position: absolute; bottom: 36px; left: 50%;
+    transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    opacity: 0; animation: fadeIn 1s 1.2s forwards;
+  }
+  .scroll-hint span { font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+  .scroll-line {
+    width: 1px; height: 40px;
+    background: linear-gradient(to bottom, var(--accent-l), transparent);
+    animation: lineGrow 2s ease-in-out infinite;
+  }
+  @keyframes lineGrow {
+    0%   { transform: scaleY(0); transform-origin: top; opacity: 1; }
+    50%  { transform: scaleY(1); transform-origin: top; opacity: 1; }
+    100% { transform: scaleY(1); transform-origin: bottom; opacity: 0; }
+  }
+
+  /* ── SECTION COMMONS ───────────────────────────────────────── */
+  section { padding: 120px 48px; position: relative; }
+  .section-label {
+    display: inline-flex; align-items: center; gap: 12px;
+    font-size: 0.68rem; font-weight: 600;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--accent-l);
+    margin-bottom: 24px;
+  }
+  .section-label::before {
+    content: '';
+    width: 28px; height: 1px;
+    background: var(--accent-l);
+  }
+  .section-title {
+    font-family: var(--serif);
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    font-weight: 400;
+    line-height: 1.15;
+    color: var(--text);
+    max-width: 700px;
+  }
+  .section-title em { font-style: italic; color: var(--accent-l); }
+  .section-intro {
+    font-size: 1rem; font-weight: 300;
+    line-height: 1.8; color: var(--muted);
+    max-width: 580px; margin-top: 16px;
+  }
+  .divider { height: 1px; background: var(--border); margin: 0 48px; }
+
+  /* ── FRAMEWORK ─────────────────────────────────────────────── */
+  #framework { background: var(--surface); }
+  .framework-header { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 32px; margin-bottom: 64px; }
+
+  .framework-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .fw-card {
+    background: var(--card);
+    padding: 44px 36px;
+    position: relative;
+    transition: background 0.3s;
+    overflow: hidden;
+  }
+  .fw-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .fw-card:hover { background: rgba(15,23,42,0.8); }
+  .fw-card:hover::before { opacity: 1; }
+
+  .fw-num {
+    font-family: var(--serif);
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    color: var(--accent-l);
+    margin-bottom: 28px;
+    display: block;
+  }
+  .fw-title {
+    font-size: 0.72rem; font-weight: 600;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--text); margin-bottom: 16px;
+  }
+  .fw-body { font-size: 0.9rem; font-weight: 300; line-height: 1.8; color: var(--muted); }
+
+  .fw-icon {
+    position: absolute; bottom: 28px; right: 28px;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--border-h);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--accent);
+    transition: border-color 0.3s, color 0.3s;
+  }
+  .fw-card:hover .fw-icon { border-color: var(--accent-l); color: var(--accent-l); }
+
+  /* ── VENTURES ──────────────────────────────────────────────── */
+  #ventures { background: var(--bg); }
+  .ventures-header { margin-bottom: 64px; }
+
+  .ventures-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .v-card {
+    background: var(--card);
+    padding: 48px 40px;
+    position: relative;
+    transition: background 0.3s;
+    cursor: none;
+    overflow: hidden;
+  }
+  .v-card:nth-child(3) { grid-column: span 2; }
+
+  .v-card::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 20% 80%, rgba(15,118,110,0.06) 0%, transparent 60%);
+    opacity: 0; transition: opacity 0.5s;
+    pointer-events: none;
+  }
+  .v-card:hover { background: #0d1424; }
+  .v-card:hover::after { opacity: 1; }
+
+  .v-tag {
+    display: inline-block;
+    font-size: 0.62rem; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent-l);
+    border: 1px solid rgba(20,184,166,0.2);
+    background: rgba(20,184,166,0.04);
+    border-radius: 2px;
+    padding: 3px 10px;
+    margin-bottom: 24px;
+  }
+
+  .v-title {
+    font-family: var(--serif);
+    font-size: clamp(1.1rem, 2vw, 1.45rem);
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+  .v-subtitle {
+    font-size: 0.7rem; font-weight: 600;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+  .v-body { font-size: 0.9rem; font-weight: 300; line-height: 1.85; color: var(--muted); max-width: 500px; }
+
+  .v-stack {
+    display: flex; gap: 6px; flex-wrap: wrap; margin-top: 28px;
+  }
+  .v-chip {
+    font-size: 0.62rem; font-weight: 500;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 3px 8px;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .v-card:hover .v-chip { border-color: rgba(20,184,166,0.2); color: rgba(20,184,166,0.7); }
+
+  .v-arrow {
+    position: absolute; top: 40px; right: 40px;
+    width: 32px; height: 32px;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted);
+    transition: border-color 0.2s, color 0.2s, transform 0.2s;
+  }
+  .v-card:hover .v-arrow { border-color: var(--accent-l); color: var(--accent-l); transform: rotate(45deg); }
+
+  /* ── RESEARCH ──────────────────────────────────────────────── */
+  #research { background: var(--surface); }
+  .research-inner {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 80px;
+    align-items: start;
+  }
+  .research-text { }
+  .research-text .section-title { margin-bottom: 24px; }
+  .research-text p {
+    font-size: 0.95rem; font-weight: 300;
+    line-height: 1.9; color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .research-text p strong { color: rgba(241,245,249,0.75); font-weight: 400; }
+
+  .research-right { }
+
+  .uabc-badge {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 28px;
+    margin-bottom: 20px;
+    background: rgba(255,255,255,0.015);
+    position: relative; overflow: hidden;
+  }
+  .uabc-badge::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(20,184,166,0.4), transparent);
+  }
+  .uabc-badge-label {
+    font-size: 0.62rem; font-weight: 600;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--accent-l); margin-bottom: 10px;
+  }
+  .uabc-badge-title {
+    font-size: 0.88rem; font-weight: 400;
+    color: var(--text); line-height: 1.5; margin-bottom: 6px;
+  }
+  .uabc-badge-sub {
+    font-size: 0.78rem; color: var(--muted); font-weight: 300;
+  }
+
+  .whitepaper-card {
+    border: 1px solid rgba(20,184,166,0.2);
+    border-radius: 6px;
+    padding: 28px;
+    background: linear-gradient(135deg, rgba(15,118,110,0.06) 0%, rgba(10,15,30,0.4) 100%);
+    position: relative; overflow: hidden;
+    cursor: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .whitepaper-card:hover {
+    border-color: rgba(20,184,166,0.4);
+    box-shadow: 0 0 40px rgba(15,118,110,0.12);
+  }
+  .whitepaper-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, var(--accent-d), var(--accent-l), var(--accent-d));
+  }
+  .wp-icon {
+    width: 40px; height: 40px; border-radius: 4px;
+    background: rgba(20,184,166,0.1);
+    border: 1px solid rgba(20,184,166,0.2);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--accent-l); margin-bottom: 16px;
+  }
+  .wp-label {
+    font-size: 0.62rem; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent-l); margin-bottom: 8px;
+  }
+  .wp-title {
+    font-family: var(--serif); font-size: 1rem;
+    color: var(--text); margin-bottom: 6px; line-height: 1.3;
+  }
+  .wp-sub {
+    font-size: 0.78rem; color: var(--muted); font-weight: 300; margin-bottom: 20px;
+  }
+  .wp-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 0.72rem; font-weight: 500;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent-l);
+    border: 1px solid rgba(20,184,166,0.25);
+    border-radius: 3px; padding: 8px 16px;
+    text-decoration: none;
+    transition: background 0.2s, border-color 0.2s;
+    cursor: none;
+  }
+  .wp-btn:hover {
+    background: rgba(20,184,166,0.08);
+    border-color: rgba(20,184,166,0.5);
+  }
+  .wp-status {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 0.62rem; font-weight: 500;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 16px;
+  }
+  .wp-status-dot { width: 5px; height: 5px; border-radius: 50%; background: #f59e0b; box-shadow: 0 0 6px #f59e0b; }
+
+  /* ── ABOUT & CONTACT ───────────────────────────────────────── */
+  #contact { background: var(--bg); }
+  .contact-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+  .contact-left .section-title { margin-bottom: 20px; }
+  .contact-statement {
+    font-size: 0.95rem; font-weight: 300;
+    line-height: 1.9; color: var(--muted);
+    margin-bottom: 32px;
+    padding-left: 20px;
+    border-left: 1px solid rgba(20,184,166,0.3);
+  }
+  .contact-statement strong { color: rgba(241,245,249,0.75); font-weight: 400; }
+
+  .contact-right { }
+
+  .contact-form-card {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 36px;
+    background: var(--card);
+    position: relative; overflow: hidden;
+  }
+  .contact-form-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(20,184,166,0.4), transparent);
+  }
+  .form-title {
+    font-size: 0.7rem; font-weight: 600;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--accent-l); margin-bottom: 24px;
+  }
+
+  .form-group { margin-bottom: 16px; }
+  .form-group label {
+    display: block; font-size: 0.7rem; font-weight: 500;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 6px;
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    color: var(--text);
+    font-family: var(--sans); font-size: 0.88rem; font-weight: 300;
+    padding: 10px 14px;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+    -webkit-appearance: none;
+    resize: none;
+    cursor: none;
+  }
+  .form-group input::placeholder,
+  .form-group textarea::placeholder { color: rgba(100,116,139,0.5); }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: rgba(20,184,166,0.4);
+    background: rgba(20,184,166,0.025);
+  }
+  .form-group select { color: var(--muted); }
+  .form-group select option { background: var(--card); }
+
+  .form-submit {
+    width: 100%;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    padding: 12px;
+    font-family: var(--sans);
+    font-size: 0.78rem; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    cursor: none;
+    margin-top: 8px;
+    transition: background 0.2s, box-shadow 0.2s;
+  }
+  .form-submit:hover {
+    background: #0d6b63;
+    box-shadow: 0 0 24px rgba(15,118,110,0.35);
+  }
+
+  .contact-alt {
+    display: flex; align-items: center; gap: 12px;
+    margin-top: 20px;
+    padding: 14px 18px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    text-decoration: none;
+    color: var(--muted); font-size: 0.82rem;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .contact-alt:hover { border-color: rgba(20,184,166,0.3); color: var(--accent-l); }
+  .contact-alt span { flex: 1; }
+
+  /* ── FOOTER ────────────────────────────────────────────────── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 48px;
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+  }
+  .footer-left { font-size: 0.75rem; color: var(--muted); }
+  .footer-left strong { color: rgba(241,245,249,0.5); font-weight: 400; }
+  .footer-right {
+    display: flex; gap: 24px;
+  }
+  .footer-right a {
+    font-size: 0.68rem; font-weight: 500;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted); text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-right a:hover { color: var(--accent-l); }
+
+  /* ── SCROLL REVEAL ─────────────────────────────────────────── */
+  .reveal {
+    opacity: 0; transform: translateY(32px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  /* ── LINE SEPARATOR ────────────────────────────────────────── */
+  .line-sep {
+    width: 100%; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 0;
+  }
+
+  /* ── RESPONSIVE ────────────────────────────────────────────── */
+  @media (max-width: 1024px) {
+    .research-inner { grid-template-columns: 1fr; gap: 48px; }
+    .research-right { max-width: 480px; }
+    .contact-inner { grid-template-columns: 1fr; gap: 48px; }
+    .hero-metrics { display: none; }
+  }
+  @media (max-width: 768px) {
+    nav { padding: 0 24px; }
+    .nav-links { display: none; }
+    .nav-cta { display: none; }
+    .nav-mobile-btn { display: block; color: var(--muted); }
+
+    section { padding: 80px 24px; }
+    .divider { margin: 0 24px; }
+    footer { padding: 24px; }
+
+    #hero { padding: 100px 24px 80px; }
+    .hero-title { font-size: 2.1rem; }
+
+    .framework-grid { grid-template-columns: 1fr; }
+    .ventures-grid { grid-template-columns: 1fr; }
+    .v-card:nth-child(3) { grid-column: span 1; }
+
+    .contact-form-card { padding: 24px; }
+  }
+  @media (max-width: 480px) {
+    .hero-title { font-size: 1.85rem; }
+    .hero-actions { flex-direction: column; }
+    .btn-primary, .btn-ghost { text-align: center; justify-content: center; }
+    body { cursor: auto; }
+    #cursor-dot, #cursor-ring { display: none; }
+  }
+
+  /* ── MOBILE NAV MENU ───────────────────────────────────────── */
+  #mobile-nav {
+    display: none;
+    position: fixed; inset: 0; z-index: 490;
+    background: rgba(10,15,30,0.97);
+    backdrop-filter: blur(20px);
+    flex-direction: column;
+    align-items: center; justify-content: center; gap: 32px;
+  }
+  #mobile-nav.open { display: flex; }
+  #mobile-nav a {
+    font-size: 1.5rem; font-family: var(--serif);
+    color: var(--text); text-decoration: none;
+    opacity: 0;
+    animation: fadeUp 0.4s forwards;
+  }
+  #mobile-nav a:nth-child(1) { animation-delay: 0.05s; }
+  #mobile-nav a:nth-child(2) { animation-delay: 0.1s; }
+  #mobile-nav a:nth-child(3) { animation-delay: 0.15s; }
+  #mobile-nav a:nth-child(4) { animation-delay: 0.2s; }
+  #mobile-nav a:hover { color: var(--accent-l); }
+</style>
+</head>
+
+<body>
+
+<!-- CURSOR -->
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+
+<!-- MOBILE NAV -->
+<div id="mobile-nav">
+  <a href="#framework" onclick="closeMobileNav()">Framework</a>
+  <a href="#ventures" onclick="closeMobileNav()">Ventures</a>
+  <a href="#research" onclick="closeMobileNav()">Research</a>
+  <a href="#contact" onclick="closeMobileNav()">Contact</a>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">Growth<span>.</span>Engineer</a>
+  <ul class="nav-links">
+    <li><a href="#framework">Framework</a></li>
+    <li><a href="#ventures">Ventures</a></li>
+    <li><a href="#research">Research</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a class="nav-cta" href="#contact">Inquire</a>
+  <button class="nav-mobile-btn" id="mobile-btn" onclick="toggleMobileNav()" aria-label="Menu">
+    <svg id="menu-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/>
+    </svg>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="grid-lines"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <div class="hero-inner">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      <span class="badge-text">Available for select partnerships</span>
+    </div>
+
+    <h1 class="hero-title">
+      Engineering Growth<br>
+      Through <em>Data Science</em><br>
+      &amp; Marketing
+    </h1>
+
+    <p class="hero-sub">
+      I build <strong>private, high-ticket customer acquisition architectures</strong>, custom software infrastructure, and predictive financial models for select business ventures.
+    </p>
+
+    <div class="hero-actions">
+      <a href="#ventures" class="btn-primary">
+        Review Active Ventures
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+      </a>
+      <a href="#contact" class="btn-ghost">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Private Inquiry
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-metrics">
+    <div class="metric-item">
+      <span class="metric-num">3</span>
+      <span class="metric-label">Active Private Verticals</span>
+    </div>
+    <div class="metric-item">
+      <span class="metric-num">ML</span>
+      <span class="metric-label">Research-Grade Models</span>
+    </div>
+    <div class="metric-item">
+      <span class="metric-num">B2B</span>
+      <span class="metric-label">High-Ticket Focus</span>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<div class="line-sep"></div>
+
+<!-- FRAMEWORK -->
+<section id="framework">
+  <div class="framework-header reveal">
+    <div>
+      <span class="section-label">Methodology</span>
+      <h2 class="section-title">My Core <em>Scientific</em> Framework</h2>
+    </div>
+    <p class="section-intro">No intuition-based decisions. Every dollar deployed follows a three-stage validation architecture.</p>
+  </div>
+
+  <div class="framework-grid reveal reveal-delay-1">
+    <div class="fw-card">
+      <span class="fw-num">01</span>
+      <h3 class="fw-title">Data Validation</h3>
+      <p class="fw-body">Extracting, cleaning, and testing real market data before deploying a single dollar in ad spend. Hypotheses are killed before they become expensive mistakes.</p>
+      <div class="fw-icon">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </div>
+    </div>
+
+    <div class="fw-card">
+      <span class="fw-num">02</span>
+      <h3 class="fw-title">Context Architecture</h3>
+      <p class="fw-body">Building localized, high-converting customer journeys designed specifically for the target demographic — not generic templates, but precision-engineered funnels.</p>
+      <div class="fw-icon">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+      </div>
+    </div>
+
+    <div class="fw-card">
+      <span class="fw-num">03</span>
+      <h3 class="fw-title">System Scalability</h3>
+      <p class="fw-body">Turning validated funnels into automated, scalable corporate assets that require minimal manual operations — systems that compound over time.</p>
+      <div class="fw-icon">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="line-sep"></div>
+
+<!-- VENTURES -->
+<section id="ventures">
+  <div class="ventures-header reveal">
+    <span class="section-label">Portfolio</span>
+    <h2 class="section-title">Active Ventures<br>&amp; <em>Solutions</em></h2>
+  </div>
+
+  <div class="ventures-grid">
+    <!-- Project A -->
+    <div class="v-card reveal reveal-delay-1">
+      <div class="v-arrow">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+      </div>
+      <span class="v-tag">Medical Tourism</span>
+      <h3 class="v-title">TMS Solutions</h3>
+      <p class="v-subtitle">Medical Tourism Portal</p>
+      <p class="v-body">Software architecture and regional data-targeting funnel engineered to route international patients from Southern California into premium medical hubs in Baja California. End-to-end patient acquisition infrastructure.</p>
+      <div class="v-stack">
+        <span class="v-chip">Geo-Targeting</span>
+        <span class="v-chip">Patient Funnels</span>
+        <span class="v-chip">SoCal → Baja</span>
+        <span class="v-chip">CRO</span>
+      </div>
+    </div>
+
+    <!-- Project B -->
+    <div class="v-card reveal reveal-delay-2">
+      <div class="v-arrow">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+      </div>
+      <span class="v-tag">E-Commerce</span>
+      <h3 class="v-title">E-Commerce Automation</h3>
+      <p class="v-subtitle">Logistical Scaling Infrastructure</p>
+      <p class="v-body">Development of internal predictive inventory systems and conversion rate optimization for automotive parts and high-demand consumer goods networks. Reducing fulfillment risk through ML-driven demand forecasting.</p>
+      <div class="v-stack">
+        <span class="v-chip">Predictive Inventory</span>
+        <span class="v-chip">CRO</span>
+        <span class="v-chip">Automotive</span>
+        <span class="v-chip">Demand Forecasting</span>
+      </div>
+    </div>
+
+    <!-- Project C — Full width -->
+    <div class="v-card reveal reveal-delay-3">
+      <div class="v-arrow">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+      </div>
+      <span class="v-tag">Financial Modeling</span>
+      <h3 class="v-title">Predictive Financial Modeling</h3>
+      <p class="v-subtitle">MiPymes Lab — Applied Research</p>
+      <p class="v-body" style="max-width:680px">Research and deployment of machine learning algorithms — Random Forest &amp; Ridge Regression — to estimate and optimize the financial health and profitability metrics of small and medium enterprises. Translating academic research into actionable business intelligence for founders and institutional investors.</p>
+      <div class="v-stack">
+        <span class="v-chip">Random Forest</span>
+        <span class="v-chip">Ridge Regression</span>
+        <span class="v-chip">SME Profitability</span>
+        <span class="v-chip">Python / Scikit-learn</span>
+        <span class="v-chip">Financial Health Index</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="line-sep"></div>
+
+<!-- RESEARCH -->
+<section id="research">
+  <div class="research-inner">
+    <div class="research-text reveal">
+      <span class="section-label">Academic Research</span>
+      <h2 class="section-title">Applied AI &amp;<br><em>Scientific Research</em></h2>
+      <p>Behind every marketing strategy, there is scientific validation. No assumption goes untested, no model goes unvalidated.</p>
+      <p>Currently developing <strong>advanced predictive models</strong> within the Artificial Intelligence Lab at the Faculty of Graduate Studies and Research in Science and Engineering <strong>(MyDCI — UABC)</strong>, specializing in process engineering and neural networks applied to real business environments.</p>
+      <p>This academic pillar guarantees that every growth architecture is backed by peer-reviewed methodology — not intuition, not trends.</p>
+    </div>
+
+    <div class="research-right reveal reveal-delay-2">
+      <div class="uabc-badge">
+        <p class="uabc-badge-label">Active Research Affiliation</p>
+        <p class="uabc-badge-title">AI Lab — Faculty of Graduate Studies &amp; Research in Science and Engineering</p>
+        <p class="uabc-badge-sub">MyDCI · Universidad Autónoma de Baja California · Ensenada, MX</p>
+      </div>
+
+      <div class="whitepaper-card">
+        <div class="wp-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </div>
+        <p class="wp-label">Confidential Executive Document</p>
+        <h3 class="wp-title">Stealth-Mode Executive Whitepaper</h3>
+        <p class="wp-sub">Predictive Profitability for Small &amp; Medium Businesses — ML Methodology &amp; Implementation Framework</p>
+        <p class="wp-status"><span class="wp-status-dot"></span> Access Upon Verified Request</p>
+        <a href="#contact" class="wp-btn">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Request Access
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="line-sep"></div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-inner">
+    <div class="contact-left reveal">
+      <span class="section-label">Private Access</span>
+      <h2 class="section-title">Select<br><em>Collaborations</em><br>Only</h2>
+      <p class="contact-statement" style="margin-top:24px">
+        I do not run public marketing campaigns for myself because my focus is <strong>entirely dedicated to the growth pipelines of my private joint ventures</strong>. I only collaborate with <strong>select founders, certified medical specialists, and institutional investors</strong>.
+      </p>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px">
+        <div style="display:flex;align-items:center;gap:10px;font-size:0.8rem;color:var(--muted)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-l)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Vetted founders &amp; business operators
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:0.8rem;color:var(--muted)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-l)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Certified medical specialists seeking patient growth
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:0.8rem;color:var(--muted)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-l)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Institutional investors requiring data-backed models
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-right reveal reveal-delay-2">
+      <div class="contact-form-card">
+        <p class="form-title">Private Inquiry Form</p>
+
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" placeholder="Dr. John Smith" />
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" placeholder="contact@company.com" />
+        </div>
+        <div class="form-group">
+          <label>Organization / Practice</label>
+          <input type="text" placeholder="Medical Group / Fund / Company" />
+        </div>
+        <div class="form-group">
+          <label>Inquiry Category</label>
+          <select>
+            <option value="" disabled selected>Select your context</option>
+            <option>Medical Tourism — Patient Acquisition</option>
+            <option>E-Commerce — Automation & Scaling</option>
+            <option>Financial Modeling — SME / MiPymes</option>
+            <option>Institutional Investment Partnership</option>
+            <option>Executive Whitepaper Access</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Brief Context</label>
+          <textarea rows="3" placeholder="Describe your current situation and what you are looking to achieve..."></textarea>
+        </div>
+        <button type="button" class="form-submit" onclick="handleSubmit(this)">
+          Submit Private Inquiry
+        </button>
+      </div>
+
+      <a href="mailto:contact@growthengineer.io" class="contact-alt">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <span>Prefer direct email contact</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p class="footer-left">
+    &copy; 2025 <strong>Growth.Engineer</strong> — Private Ventures Portfolio · All engagements are by invitation or verified inquiry only.
+  </p>
+  <div class="footer-right">
+    <a href="#hero">Top</a>
+    <a href="#ventures">Ventures</a>
+    <a href="#research">Research</a>
+    <a href="#contact">Contact</a>
+  </div>
+</footer>
+
+<script>
+  /* ── CURSOR ── */
+  const dot  = document.getElementById('cursor-dot');
+  const ring = document.getElementById('cursor-ring');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    dot.style.transform = `translate(${mx}px, ${my}px) translate(-50%,-50%)`;
+  });
+
+  function lerpCursor() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%,-50%)`;
+    requestAnimationFrame(lerpCursor);
+  }
+  lerpCursor();
+
+  document.querySelectorAll('a, button, .v-card, .fw-card, .whitepaper-card').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      ring.style.width  = '48px';
+      ring.style.height = '48px';
+      ring.style.borderColor = 'rgba(20,184,166,0.7)';
+      dot.style.transform = `translate(${mx}px, ${my}px) translate(-50%,-50%) scale(0)`;
+    });
+    el.addEventListener('mouseleave', () => {
+      ring.style.width  = '30px';
+      ring.style.height = '30px';
+      ring.style.borderColor = 'rgba(20,184,166,0.4)';
+      dot.style.transform = `translate(${mx}px, ${my}px) translate(-50%,-50%) scale(1)`;
+    });
+  });
+
+  /* ── SCROLL REVEAL ── */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  /* ── NAV SCROLL ── */
+  window.addEventListener('scroll', () => {
+    const nav = document.querySelector('nav');
+    if (window.scrollY > 60) {
+      nav.style.background = 'rgba(10,15,30,0.92)';
+    } else {
+      nav.style.background = 'rgba(10,15,30,0.7)';
+    }
+  });
+
+  /* ── MOBILE NAV ── */
+  function toggleMobileNav() {
+    document.getElementById('mobile-nav').classList.toggle('open');
+  }
+  function closeMobileNav() {
+    document.getElementById('mobile-nav').classList.remove('open');
+  }
+
+  /* ── FORM SUBMIT ── */
+  function handleSubmit(btn) {
+    btn.textContent = 'Inquiry Received — We\'ll be in touch.';
+    btn.style.background = 'var(--accent-d)';
+    btn.style.pointerEvents = 'none';
+    btn.style.opacity = '0.7';
+  }
+</script>
+</body>
+</html>
