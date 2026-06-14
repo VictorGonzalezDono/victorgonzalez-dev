@@ -1,59 +1,505 @@
-
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>45-Day Study Dashboard · TOEFL ITP + ML Engineering</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:var(--font-sans)}
-.wrap{padding:1rem 0;max-width:680px}
-.header{margin-bottom:1.5rem}
-.header h1{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:6px}
-.header p{font-size:14px;color:var(--color-text-secondary);line-height:1.5}
-.legend{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:1.5rem}
-.badge{font-size:11px;font-weight:500;padding:4px 10px;border-radius:20px}
-.b-toefl{background:#EEEDFE;color:#3C3489}
-.b-ml{background:#E1F5EE;color:#085041}
-.b-review{background:#FAEEDA;color:#633806}
-.nav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.5rem}
-.week-btn{font-size:12px;padding:5px 10px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);cursor:pointer;background:var(--color-background-primary);color:var(--color-text-secondary);transition:all .15s}
-.week-btn.active{background:var(--color-background-secondary);color:var(--color-text-primary);border-color:var(--color-border-primary);font-weight:500}
-.week-header{font-size:13px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;padding-bottom:6px;border-bottom:0.5px solid var(--color-border-tertiary)}
-.day-card{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px 16px;margin-bottom:10px;background:var(--color-background-primary);cursor:pointer;transition:border-color .15s}
-.day-card:hover{border-color:var(--color-border-secondary)}
-.day-card.expanded{border-color:var(--color-border-primary)}
-.day-top{display:flex;align-items:center;gap:10px}
-.day-num{font-size:12px;font-weight:500;color:var(--color-text-tertiary);min-width:42px}
-.day-title{font-size:14px;font-weight:500;color:var(--color-text-primary);flex:1}
-.day-body{display:none;margin-top:12px;border-top:0.5px solid var(--color-border-tertiary);padding-top:12px}
-.day-card.expanded .day-body{display:block}
-.field{margin-bottom:10px}
-.field-label{font-size:11px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
-.field-val{font-size:13px;color:var(--color-text-primary);line-height:1.6}
-.dual{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
-.dual-box{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 12px}
-.dual-box .field-label{margin-bottom:3px}
-.search-tag{display:inline-block;font-size:11px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:20px;padding:3px 8px;color:var(--color-text-secondary);margin:2px 2px 2px 0;font-family:var(--font-mono)}
-.progress{margin-bottom:1.5rem}
-.prog-bar{height:6px;background:var(--color-background-secondary);border-radius:10px;overflow:hidden}
-.prog-fill{height:100%;background:#534AB7;border-radius:10px;transition:width .3s}
-.prog-label{font-size:12px;color:var(--color-text-secondary);margin-top:4px}
+/* ─── RESET & BASE ─────────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg-deep:#07091200;
+  --bg-base:#0A0E1A;
+  --bg-card:#111827;
+  --bg-card-hover:#151d2e;
+  --bg-elevated:#1A2035;
+  --bg-input:#0f1729;
+  --border-subtle:#1e2a42;
+  --border-mid:#253352;
+  --text-primary:#F0F4FF;
+  --text-secondary:#8896B3;
+  --text-tertiary:#4A5A7A;
+  --text-muted:#2d3d5c;
+  /* Category colors */
+  --indigo:#818CF8;
+  --indigo-bg:#1E1B4B;
+  --indigo-border:#312e81;
+  --indigo-glow:rgba(99,102,241,0.15);
+  --emerald:#34D399;
+  --emerald-bg:#064E3B;
+  --emerald-border:#065f46;
+  --emerald-glow:rgba(16,185,129,0.12);
+  --amber:#FCD34D;
+  --amber-bg:#451A03;
+  --amber-border:#78350F;
+  --amber-glow:rgba(245,158,11,0.12);
+  /* UI */
+  --radius-sm:6px;
+  --radius-md:10px;
+  --radius-lg:14px;
+  --radius-xl:18px;
+  --font-sans:'Inter',system-ui,sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+  --transition:all 0.2s cubic-bezier(0.4,0,0.2,1);
+}
+
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font-sans);
+  background-color:var(--bg-base);
+  color:var(--text-primary);
+  min-height:100vh;
+  line-height:1.6;
+  /* Subtle dot-grid texture */
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(99,102,241,0.06) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(16,185,129,0.04) 0%, transparent 50%),
+    radial-gradient(rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size:auto,auto,28px 28px;
+}
+
+/* ─── LAYOUT ──────────────────────────────────────────────────── */
+.app-shell{display:flex;min-height:100vh}
+
+/* ─── SIDEBAR ─────────────────────────────────────────────────── */
+.sidebar{
+  width:280px;
+  min-width:280px;
+  background:var(--bg-card);
+  border-right:1px solid var(--border-subtle);
+  display:flex;
+  flex-direction:column;
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow-y:auto;
+  padding:28px 20px 24px;
+  gap:28px;
+  scrollbar-width:thin;
+  scrollbar-color:var(--border-mid) transparent;
+}
+.sidebar::-webkit-scrollbar{width:4px}
+.sidebar::-webkit-scrollbar-track{background:transparent}
+.sidebar::-webkit-scrollbar-thumb{background:var(--border-mid);border-radius:4px}
+
+.brand{display:flex;flex-direction:column;gap:6px}
+.brand-label{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--text-tertiary)}
+.brand-title{font-size:15px;font-weight:700;color:var(--text-primary);line-height:1.3}
+.brand-sub{font-size:11px;color:var(--text-secondary);line-height:1.5}
+
+/* Progress ring */
+.prog-section{display:flex;flex-direction:column;align-items:center;gap:12px}
+.prog-ring-wrap{position:relative;width:120px;height:120px}
+.prog-ring-wrap svg{transform:rotate(-90deg)}
+.ring-track{fill:none;stroke:var(--border-subtle);stroke-width:8}
+.ring-fill{fill:none;stroke:url(#ringGrad);stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset 0.6s cubic-bezier(0.4,0,0.2,1)}
+.ring-label{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}
+.ring-pct{font-size:22px;font-weight:700;color:var(--text-primary);line-height:1}
+.ring-days{font-size:10px;color:var(--text-secondary);font-weight:500}
+.prog-detail{text-align:center}
+.prog-count{font-size:13px;font-weight:600;color:var(--text-primary)}
+.prog-count span{color:var(--indigo)}
+.prog-sub{font-size:11px;color:var(--text-tertiary);margin-top:2px}
+
+/* Heatmap */
+.heatmap-section{}
+.section-label{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:10px}
+.heatmap-grid{display:grid;grid-template-columns:repeat(9,1fr);gap:5px}
+.hm-dot{
+  aspect-ratio:1;
+  border-radius:3px;
+  background:var(--border-subtle);
+  cursor:pointer;
+  transition:var(--transition);
+  position:relative;
+}
+.hm-dot:hover{transform:scale(1.2)}
+.hm-dot.toefl.done{background:var(--indigo);box-shadow:0 0 6px rgba(129,140,248,0.5)}
+.hm-dot.ml.done{background:var(--emerald);box-shadow:0 0 6px rgba(52,211,153,0.4)}
+.hm-dot.review.done{background:var(--amber);box-shadow:0 0 6px rgba(252,211,77,0.4)}
+.hm-dot.toefl:not(.done){background:rgba(129,140,248,0.12)}
+.hm-dot.ml:not(.done){background:rgba(52,211,153,0.08)}
+.hm-dot.review:not(.done){background:rgba(252,211,77,0.08)}
+
+/* Category legend */
+.legend{display:flex;flex-direction:column;gap:8px}
+.legend-item{display:flex;align-items:center;gap:8px;cursor:pointer;padding:6px 8px;border-radius:var(--radius-sm);transition:var(--transition)}
+.legend-item:hover{background:var(--bg-elevated)}
+.legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.legend-item span{font-size:12px;color:var(--text-secondary)}
+.legend-item .legend-count{margin-left:auto;font-size:11px;font-family:var(--font-mono);color:var(--text-tertiary)}
+
+/* Week nav */
+.week-nav{display:flex;flex-direction:column;gap:4px}
+.week-nav-btn{
+  display:flex;align-items:center;gap:8px;
+  padding:7px 10px;border-radius:var(--radius-sm);
+  background:transparent;border:none;color:var(--text-secondary);
+  font-family:var(--font-sans);font-size:12px;font-weight:500;
+  cursor:pointer;transition:var(--transition);text-align:left;
+  width:100%;
+}
+.week-nav-btn:hover{background:var(--bg-elevated);color:var(--text-primary)}
+.week-nav-btn.active{background:rgba(99,102,241,0.12);color:var(--indigo);border-left:2px solid var(--indigo);padding-left:8px}
+.week-nav-btn .wk-num{font-size:10px;font-family:var(--font-mono);color:var(--text-tertiary);min-width:20px}
+.week-nav-btn.active .wk-num{color:var(--indigo)}
+.week-nav-btn .wk-prog{margin-left:auto;font-size:10px;font-family:var(--font-mono);color:var(--text-tertiary)}
+
+/* ─── MAIN ────────────────────────────────────────────────────── */
+.main{flex:1;min-width:0;padding:32px 28px 60px;display:flex;flex-direction:column;gap:24px}
+
+/* Controls */
+.controls{
+  position:sticky;top:0;z-index:100;
+  background:rgba(10,14,26,0.92);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border-subtle);
+  margin:-32px -28px 0;
+  padding:16px 28px;
+  display:flex;flex-wrap:wrap;gap:10px;align-items:center;
+}
+.search-wrap{position:relative;flex:1;min-width:200px}
+.search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text-tertiary);pointer-events:none;font-size:14px}
+.search-input{
+  width:100%;background:var(--bg-input);
+  border:1px solid var(--border-subtle);border-radius:var(--radius-md);
+  color:var(--text-primary);font-family:var(--font-sans);font-size:13px;
+  padding:8px 12px 8px 34px;outline:none;transition:var(--transition);
+}
+.search-input::placeholder{color:var(--text-tertiary)}
+.search-input:focus{border-color:var(--indigo);box-shadow:0 0 0 3px rgba(129,140,248,0.1)}
+.filter-group{display:flex;gap:4px;flex-wrap:wrap}
+.filter-btn{
+  padding:6px 12px;border-radius:var(--radius-md);border:1px solid var(--border-subtle);
+  background:transparent;color:var(--text-secondary);font-family:var(--font-sans);font-size:12px;font-weight:500;
+  cursor:pointer;transition:var(--transition);white-space:nowrap;
+}
+.filter-btn:hover{border-color:var(--border-mid);color:var(--text-primary)}
+.filter-btn.active{background:rgba(129,140,248,0.12);border-color:var(--indigo);color:var(--indigo)}
+.filter-btn.f-toefl.active{background:rgba(129,140,248,0.12);border-color:var(--indigo);color:var(--indigo)}
+.filter-btn.f-ml.active{background:rgba(52,211,153,0.1);border-color:var(--emerald);color:var(--emerald)}
+.filter-btn.f-review.active{background:rgba(252,211,77,0.1);border-color:var(--amber);color:var(--amber)}
+.filter-btn.f-done.active{background:rgba(99,102,241,0.08);border-color:var(--indigo);color:var(--indigo)}
+.filter-btn.f-pending.active{background:rgba(74,90,122,0.2);border-color:var(--border-mid);color:var(--text-primary)}
+
+/* Week header */
+.week-header{
+  display:flex;align-items:center;gap:14px;
+  padding-top:8px;
+}
+.week-header-num{
+  font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--text-tertiary);font-family:var(--font-mono);
+}
+.week-header-title{font-size:17px;font-weight:600;color:var(--text-primary)}
+.week-header-line{flex:1;height:1px;background:var(--border-subtle)}
+.week-header-count{font-size:11px;color:var(--text-tertiary);font-family:var(--font-mono);white-space:nowrap}
+
+/* Days grid */
+.days-list{display:flex;flex-direction:column;gap:8px}
+
+/* Day card */
+.day-card{
+  background:var(--bg-card);
+  border:1px solid var(--border-subtle);
+  border-radius:var(--radius-lg);
+  overflow:hidden;
+  transition:border-color 0.2s,box-shadow 0.2s;
+  position:relative;
+}
+.day-card::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+  border-radius:3px 0 0 3px;
+  transition:opacity 0.2s;
+  opacity:0.7;
+}
+.day-card.toefl::before{background:var(--indigo)}
+.day-card.ml::before{background:var(--emerald)}
+.day-card.review::before{background:var(--amber)}
+.day-card:hover{border-color:var(--border-mid)}
+.day-card.toefl:hover,.day-card.toefl.expanded{border-color:var(--indigo-border);box-shadow:0 0 0 1px rgba(129,140,248,0.1),0 4px 20px rgba(99,102,241,0.08)}
+.day-card.ml:hover,.day-card.ml.expanded{border-color:var(--emerald-border);box-shadow:0 0 0 1px rgba(52,211,153,0.08),0 4px 20px rgba(16,185,129,0.06)}
+.day-card.review:hover,.day-card.review.expanded{border-color:var(--amber-border);box-shadow:0 0 0 1px rgba(252,211,77,0.08),0 4px 20px rgba(245,158,11,0.06)}
+.day-card.done-card{opacity:0.7}
+.day-card.hidden{display:none}
+
+/* Card header */
+.card-top{
+  display:flex;align-items:center;gap:12px;
+  padding:14px 16px 14px 20px;
+  cursor:pointer;user-select:none;
+}
+.day-num-badge{
+  font-size:10px;font-weight:700;font-family:var(--font-mono);
+  color:var(--text-tertiary);min-width:32px;
+}
+.type-badge{
+  font-size:10px;font-weight:600;padding:3px 8px;border-radius:20px;
+  letter-spacing:.04em;white-space:nowrap;flex-shrink:0;
+}
+.toefl .type-badge{background:rgba(129,140,248,0.12);color:var(--indigo);border:1px solid rgba(129,140,248,0.2)}
+.ml .type-badge{background:rgba(52,211,153,0.1);color:var(--emerald);border:1px solid rgba(52,211,153,0.2)}
+.review .type-badge{background:rgba(252,211,77,0.1);color:var(--amber);border:1px solid rgba(252,211,77,0.2)}
+.card-title{font-size:13px;font-weight:500;color:var(--text-primary);flex:1;line-height:1.4}
+.card-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.check-btn{
+  width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border-mid);
+  background:transparent;cursor:pointer;transition:var(--transition);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.check-btn:hover{border-color:var(--indigo)}
+.day-card.done-card .check-btn{background:var(--indigo);border-color:var(--indigo)}
+.check-btn svg{display:none;width:11px;height:11px;color:white}
+.day-card.done-card .check-btn svg{display:block}
+.chevron{color:var(--text-tertiary);transition:transform 0.25s cubic-bezier(0.4,0,0.2,1);width:14px;height:14px;flex-shrink:0}
+.day-card.expanded .chevron{transform:rotate(180deg)}
+
+/* Card body */
+.card-body{
+  max-height:0;overflow:hidden;
+  transition:max-height 0.4s cubic-bezier(0.4,0,0.2,1),opacity 0.3s;
+  opacity:0;
+}
+.day-card.expanded .card-body{max-height:1200px;opacity:1}
+.card-body-inner{
+  padding:0 20px 20px 20px;
+  border-top:1px solid var(--border-subtle);
+}
+.focus-row{
+  display:flex;align-items:center;gap:6px;
+  padding:10px 0 14px;
+}
+.focus-icon{font-size:12px;color:var(--text-tertiary)}
+.focus-text{font-size:12px;color:var(--text-secondary);font-weight:500}
+
+/* Theory block */
+.teoria-block{
+  background:var(--bg-input);
+  border:1px solid var(--border-subtle);
+  border-radius:var(--radius-md);
+  padding:14px 16px;
+  margin-bottom:14px;
+}
+.block-label{
+  font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--text-tertiary);margin-bottom:10px;display:flex;align-items:center;gap:6px;
+}
+.block-label::after{content:'';flex:1;height:1px;background:var(--border-subtle)}
+.teoria-text{
+  font-family:var(--font-mono);font-size:11.5px;
+  color:var(--text-secondary);line-height:1.75;white-space:pre-wrap;
+  word-break:break-word;
+}
+
+/* Search tags */
+.search-block{margin-bottom:14px}
+.tags-wrap{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.search-tag{
+  display:inline-flex;align-items:center;
+  font-size:11px;font-family:var(--font-mono);
+  background:var(--bg-elevated);border:1px solid var(--border-subtle);
+  border-radius:20px;padding:4px 10px;color:var(--text-tertiary);
+  transition:var(--transition);cursor:default;
+}
+.search-tag:hover{border-color:var(--border-mid);color:var(--text-secondary)}
+
+/* Dual value boxes */
+.dual-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
+.dual-box{
+  background:var(--bg-elevated);border-radius:var(--radius-md);
+  padding:12px 14px;border:1px solid var(--border-subtle);
+}
+.dual-label{
+  font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  margin-bottom:6px;
+}
+.dual-box.toefl-box .dual-label{color:var(--indigo)}
+.dual-box.ml-box .dual-label{color:var(--emerald)}
+.dual-text{font-size:12px;color:var(--text-secondary);line-height:1.6}
+
+/* No results */
+.no-results{
+  text-align:center;padding:60px 20px;
+  color:var(--text-tertiary);font-size:14px;
+}
+.no-results .nr-icon{font-size:36px;margin-bottom:12px;opacity:0.5}
+
+/* ─── MOBILE NAV ──────────────────────────────────────────────── */
+.mobile-header{display:none}
+.mobile-week-scroll{display:none}
+
+/* ─── SCROLLBAR ───────────────────────────────────────────────── */
+.main::-webkit-scrollbar{width:0}
+
+/* ─── ANIMATIONS ──────────────────────────────────────────────── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.day-card{animation:fadeUp 0.25s ease both}
+.day-card:nth-child(2){animation-delay:.03s}
+.day-card:nth-child(3){animation-delay:.06s}
+.day-card:nth-child(4){animation-delay:.09s}
+.day-card:nth-child(5){animation-delay:.12s}
+.day-card:nth-child(6){animation-delay:.15s}
+.day-card:nth-child(7){animation-delay:.18s}
+
+/* ─── RESPONSIVE ──────────────────────────────────────────────── */
+@media(max-width:900px){
+  .sidebar{display:none}
+  .mobile-header{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 16px 10px;
+    background:var(--bg-card);
+    border-bottom:1px solid var(--border-subtle);
+    position:sticky;top:0;z-index:200;
+  }
+  .mobile-header .brand-title{font-size:14px}
+  .mobile-header .brand-sub{font-size:10px;color:var(--text-tertiary)}
+  .mobile-ring{display:flex;align-items:center;gap:8px}
+  .mobile-pct{font-size:13px;font-weight:700;color:var(--indigo)}
+  .mobile-week-scroll{
+    display:flex;gap:6px;overflow-x:auto;
+    padding:10px 16px;
+    background:var(--bg-card);
+    border-bottom:1px solid var(--border-subtle);
+    scrollbar-width:none;
+  }
+  .mobile-week-scroll::-webkit-scrollbar{display:none}
+  .mobile-week-scroll .week-nav-btn{
+    white-space:nowrap;flex-shrink:0;
+    border:1px solid var(--border-subtle);border-radius:var(--radius-md);
+    padding:5px 10px;
+  }
+  .mobile-week-scroll .week-nav-btn.active{
+    background:rgba(129,140,248,0.12);border-color:var(--indigo);
+    border-left:1px solid var(--indigo);padding-left:10px;
+  }
+  .app-shell{flex-direction:column}
+  .main{padding:12px 12px 60px}
+  .controls{margin:-12px -12px 0;padding:10px 12px}
+  .dual-grid{grid-template-columns:1fr}
+}
+@media(max-width:520px){
+  .filter-group{gap:3px}
+  .filter-btn{padding:5px 9px;font-size:11px}
+  .card-title{font-size:12px}
+}
 </style>
-<div class="wrap">
-<h2 class="sr-only">Programa intensivo TOEFL ITP + ML Engineering — 45 días</h2>
-<div class="header">
-<h1>Programa intensivo C1 · 45 días · 1h diaria</h1>
-<p>TOEFL ITP (60%) + ML Engineering Interview Prep (40%) · Haz clic en cualquier día para ver el detalle completo.</p>
+</head>
+<body>
+<!-- Mobile header -->
+<div class="mobile-header">
+  <div>
+    <div class="brand-title">45-Day Study Plan</div>
+    <div class="brand-sub">TOEFL ITP + ML Engineering</div>
+  </div>
+  <div class="mobile-ring">
+    <svg width="36" height="36" viewBox="0 0 36 36">
+      <defs><linearGradient id="mgr" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#818CF8"/><stop offset="100%" stop-color="#34D399"/></linearGradient></defs>
+      <circle cx="18" cy="18" r="14" fill="none" stroke="#1e2a42" stroke-width="5"/>
+      <circle id="mobile-ring-fill" cx="18" cy="18" r="14" fill="none" stroke="url(#mgr)" stroke-width="5" stroke-linecap="round" stroke-dasharray="87.96" stroke-dashoffset="87.96" transform="rotate(-90 18 18)"/>
+    </svg>
+    <span class="mobile-pct" id="mobile-pct">0%</span>
+  </div>
 </div>
-<div class="legend">
-<span class="badge b-toefl">TOEFL ITP</span>
-<span class="badge b-ml">ML Engineering</span>
-<span class="badge b-review">Review / Mock</span>
+<div class="mobile-week-scroll" id="mobile-week-nav"></div>
+
+<div class="app-shell">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-label">Study Dashboard</div>
+      <div class="brand-title">Programa Intensivo C1</div>
+      <div class="brand-sub">TOEFL ITP · ML Engineering · 45 días · 1h diaria</div>
+    </div>
+
+    <!-- Progress ring -->
+    <div class="prog-section">
+      <div class="prog-ring-wrap">
+        <svg width="120" height="120" viewBox="0 0 120 120">
+          <defs>
+            <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#818CF8"/>
+              <stop offset="100%" stop-color="#34D399"/>
+            </linearGradient>
+          </defs>
+          <circle class="ring-track" cx="60" cy="60" r="50"/>
+          <circle class="ring-fill" id="ring-fill" cx="60" cy="60" r="50"
+            stroke-dasharray="314.16" stroke-dashoffset="314.16"/>
+        </svg>
+        <div class="ring-label">
+          <div class="ring-pct" id="ring-pct">0%</div>
+          <div class="ring-days" id="ring-days">0 / 45 días</div>
+        </div>
+      </div>
+      <div class="prog-detail">
+        <div class="prog-count"><span id="done-count">0</span> días completados</div>
+        <div class="prog-sub" id="streak-text">Comienza marcando tu primer día ✓</div>
+      </div>
+    </div>
+
+    <!-- Heatmap -->
+    <div class="heatmap-section">
+      <div class="section-label">Mapa de progreso — 45 días</div>
+      <div class="heatmap-grid" id="heatmap"></div>
+    </div>
+
+    <!-- Legend -->
+    <div>
+      <div class="section-label">Categorías</div>
+      <div class="legend">
+        <div class="legend-item" data-filter="toefl" onclick="applyFilter('toefl',this)">
+          <div class="legend-dot" style="background:var(--indigo)"></div>
+          <span>TOEFL ITP</span>
+          <span class="legend-count" id="cnt-toefl">0/0</span>
+        </div>
+        <div class="legend-item" data-filter="ml" onclick="applyFilter('ml',this)">
+          <div class="legend-dot" style="background:var(--emerald)"></div>
+          <span>ML Engineering</span>
+          <span class="legend-count" id="cnt-ml">0/0</span>
+        </div>
+        <div class="legend-item" data-filter="review" onclick="applyFilter('review',this)">
+          <div class="legend-dot" style="background:var(--amber)"></div>
+          <span>Review / Mock</span>
+          <span class="legend-count" id="cnt-review">0/0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Week nav -->
+    <div>
+      <div class="section-label">Semanas</div>
+      <div class="week-nav" id="sidebar-week-nav"></div>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main class="main" id="main">
+    <!-- Sticky controls -->
+    <div class="controls">
+      <div class="search-wrap">
+        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" class="search-input" id="search-input" placeholder="Buscar por título, teoría...">
+      </div>
+      <div class="filter-group">
+        <button class="filter-btn active" data-filter="all" onclick="applyFilter('all',this)">Todo</button>
+        <button class="filter-btn f-toefl" data-filter="toefl" onclick="applyFilter('toefl',this)">TOEFL</button>
+        <button class="filter-btn f-ml" data-filter="ml" onclick="applyFilter('ml',this)">ML Eng</button>
+        <button class="filter-btn f-review" data-filter="review" onclick="applyFilter('review',this)">Review</button>
+        <button class="filter-btn f-done" data-filter="done" onclick="applyFilter('done',this)">✓ Completados</button>
+        <button class="filter-btn f-pending" data-filter="pending" onclick="applyFilter('pending',this)">Pendientes</button>
+      </div>
+    </div>
+
+    <div id="content-area"></div>
+  </main>
 </div>
-<div class="nav" id="nav"></div>
-<div class="progress">
-<div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
-<div class="prog-label" id="prog-label">Selecciona una semana para comenzar</div>
-</div>
-<div id="days-container"></div>
-</div>
+
 <script>
+/* ═══════════════════════════════════════════════════
+   DATA
+═══════════════════════════════════════════════════ */
 const weeks=[
 {title:"Semana 1 — Días 1–7: Fundamentos de alto rendimiento",days:[
 {n:1,type:"toefl",title:"TOEFL Structure: Parallel Structures & Subject-Verb Agreement Traps",focus:"TOEFL ITP — Structure & Written Expression",teoria:`PARALLEL STRUCTURE RULE: All elements in a series must share the same grammatical form.\n• Correct: "The model was trained, evaluated, AND deployed."\n• Trap: "The model was trained, in evaluation, AND deploying." → ERROR\n\nSVA INVERSION TRAPS:\n• "Neither X nor Y [verb agrees with Y]"\n• "There + BE + [subject]" → verb follows subject, not 'there'\n• Prepositional phrase between S and V hides the real subject\n\nKEY PATTERN: "Each of the / One of the / Every + [plural noun] + [singular verb]"`,search:`"TOEFL ITP Structure Section traps parallel structure" | "TOEFL written expression parallel form tricks"`,toefl:"Las preguntas de Written Expression testean estas trampas en >30% de los ítems. Dominarlas en 3-4 segundos cada una es la diferencia entre banda 50 y 60.",ml:"En una entrevista cuando describes un pipeline: 'The system ingests, preprocesses, and trains' — la paralelismo correcto proyecta articulación técnica precisa."},
@@ -87,7 +533,7 @@ const weeks=[
 {n:23,type:"ml",title:"Communicating Uncertainty & Limitations in ML — The Senior Mindset",focus:"ML Engineering — Interview Prep / Technical Vocabulary",teoria:`COMMUNICATING UNCERTAINTY (diferencia Junior vs. Senior):\n\nJunior: "The model achieves 94% accuracy."\nSenior: "The model achieves 94% accuracy on the held-out test set, which is IID with training. We have not yet evaluated on out-of-distribution scenarios, where I'd expect degradation."\n\nFRAMEWORK: Result → Condition → Caveat → Next Step\n\nKEY PHRASES PARA ENTREVISTAS:\n• "That said, there's a caveat worth mentioning..."\n• "The trade-off here is..."\n• "This works well under the assumption that..."\n• "I'd want to validate this on..."\n• "A risk I'd flag is..."\n• "The limitation of this approach is X; we mitigated it by Y."\n\nCUANDO NO SABES LA RESPUESTA:\n"I haven't implemented that specific architecture, but based on my understanding of [related concept], I'd reason that..." → Shows intellectual honesty + reasoning ability`,search:`"senior ML engineer interview communication uncertainty limitations" | "how to answer machine learning interview questions you don't know"`,toefl:"Este patrón de claim + condition + caveat es idéntico a la estructura argumental de los pasajes científicos del TOEFL ITP.",ml:"Los entrevistadores en empresas top valoran la honestidad calibrada. Decir 'I don't know but here's how I'd think about it' > bluffing con un respuesta vaga."},
 {n:24,type:"toefl",title:"TOEFL Reading: Purpose of Paragraph & Rhetorical Function",focus:"TOEFL ITP — Reading Comprehension",teoria:`RHETORICAL FUNCTION QUESTIONS:\n"Why does the author mention X in paragraph 3?"\n"What is the function of the second paragraph?"\n\nFUNCTIONES RETÓRICAS COMUNES:\n• To provide an example of [claim in previous sentence]\n• To contrast with [the method/view described earlier]\n• To support the claim that [main argument]\n• To introduce a limitation of [the proposed approach]\n• To define a term used in [subsequent paragraphs]\n\nESTRATEGIA:\n1. Lee el párrafo ANTES del mencionado (contexto previo)\n2. Identifica la relación lógica: ¿agrega? ¿contrasta? ¿ilustra?\n3. Elige la opción que describe esa RELACIÓN, no el CONTENIDO\n\nTRAMPA: Opciones que describen correctamente qué DICE el párrafo pero no por qué está AHÍ`,search:`"TOEFL ITP reading rhetorical purpose paragraph function question" | "TOEFL reading comprehension why author mentions strategy"`,toefl:"Rhetorical function questions son las más difíciles del Reading ITP. Distinguir 'qué dice' de 'por qué está aquí' requiere comprensión de macroorganización.",ml:"Entender la función retórica de cada sección de un paper de ML (¿por qué los autores mencionan X en la introducción?) acelera la lectura crítica de literatura."},
 {n:25,type:"toefl",title:"TOEFL Structure: Passive Voice in Academic Writing",focus:"TOEFL ITP — Structure & Written Expression",teoria:`PASSIVE VOICE — ACADEMIC USAGE:\n\nFORMACIÓN: BE (conjugado) + past participle\n• "The model was trained on 100M tokens."\n• "Results have been validated by two independent teams."\n• "The hypothesis will be tested in subsequent experiments."\n\nTRAMPAS EN WRITTEN EXPRESSION:\n1. Missing BE: "The data *collected* from 50 participants." → necesita WAS/WERE\n2. Wrong participle: "The results were *showed*" → SHOWN\n3. Passive with stative verbs: "The paper was consisted of..." → ERROR (consist no tiene voz pasiva activa en inglés)\n   Verbos SIN pasiva: consist, contain, include, resemble, lack\n\nWHEN TO USE PASSIVE IN ACADEMIC WRITING:\n• Agent unknown or unimportant\n• To emphasize the object/result\n• To maintain objectivity (scientific reports)\n• "Experiments were conducted..." — no dice quién → objectivity`,search:`"TOEFL ITP passive voice written expression errors" | "passive voice academic writing stative verbs no passive"`,toefl:"El pasivo es la voz dominante en escritura académica — los pasajes de Reading están llenos de él, y Written Expression testa sus formas incorrectas directamente.",ml:"Escribir documentación técnica, papers internos y READMEs con pasivo correcto ('The model was fine-tuned', NOT 'The model was fine-tuning') marca calidad profesional."},
-{n:26,type:"ml",title:"Large Language Models in Production: RAG, Fine-tuning & Prompt Engineering",focus:"ML Engineering — Technical Vocabulary / Interview Prep",focus2:"ML Engineering — System Design",teoria:`LLM PRODUCTION DECISION TREE:\n\n[Prompt Engineering] → Try first. Zero cost, fast iteration.\n• Few-shot examples, chain-of-thought, system prompts\n• Limit: works for well-defined tasks with good base model\n\n[RAG (Retrieval-Augmented Generation)] → When:\n• Knowledge needs to be current or proprietary\n• Need source attribution\n• Architecture: Query → Embedding → Vector DB search → Context injection → LLM\n• Tools: LangChain, LlamaIndex, Chroma, Pinecone\n\n[Fine-tuning] → When:\n• Specific style/format required\n• Domain adaptation needed (medical, legal, code)\n• Methods: LoRA/QLoRA (parameter-efficient), full fine-tuning\n• Risk: catastrophic forgetting — use regularization\n\n[Pre-training] → Almost never for a single org. Use foundation models.\n\nKEY PHRASE: "I follow a cost-complexity curve: start with prompting, add RAG for knowledge grounding, fine-tune only if behavioral alignment is required."`,search:`"RAG vs fine-tuning LLM when to use interview 2024" | "LLM production system design RAG fine-tuning tradeoffs"`,toefl:"Articular una jerarquía de decisiones (primero X, luego Y si X no aplica) es el mismo patrón lógico que TOEFL testea en secuencias de causa-efecto en Reading.",ml:"LLMs son el tema más preguntado en entrevistas MLE 2024-2025. Este decision tree te da una respuesta estructurada y memorable."},
+{n:26,type:"ml",title:"Large Language Models in Production: RAG, Fine-tuning & Prompt Engineering",focus:"ML Engineering — Technical Vocabulary / Interview Prep",teoria:`LLM PRODUCTION DECISION TREE:\n\n[Prompt Engineering] → Try first. Zero cost, fast iteration.\n• Few-shot examples, chain-of-thought, system prompts\n• Limit: works for well-defined tasks with good base model\n\n[RAG (Retrieval-Augmented Generation)] → When:\n• Knowledge needs to be current or proprietary\n• Need source attribution\n• Architecture: Query → Embedding → Vector DB search → Context injection → LLM\n• Tools: LangChain, LlamaIndex, Chroma, Pinecone\n\n[Fine-tuning] → When:\n• Specific style/format required\n• Domain adaptation needed (medical, legal, code)\n• Methods: LoRA/QLoRA (parameter-efficient), full fine-tuning\n• Risk: catastrophic forgetting — use regularization\n\n[Pre-training] → Almost never for a single org. Use foundation models.\n\nKEY PHRASE: "I follow a cost-complexity curve: start with prompting, add RAG for knowledge grounding, fine-tune only if behavioral alignment is required."`,search:`"RAG vs fine-tuning LLM when to use interview 2024" | "LLM production system design RAG fine-tuning tradeoffs"`,toefl:"Articular una jerarquía de decisiones (primero X, luego Y si X no aplica) es el mismo patrón lógico que TOEFL testea en secuencias de causa-efecto en Reading.",ml:"LLMs son el tema más preguntado en entrevistas MLE 2024-2025. Este decision tree te da una respuesta estructurada y memorable."},
 {n:27,type:"toefl",title:"TOEFL Listening: Connecting Spoken & Written Academic English",focus:"TOEFL ITP — Listening Comprehension",teoria:`SPOKEN vs. WRITTEN REGISTER — EL PUENTE:\n\nSPOKEN (ITP audio): contraction-heavy, hedge words, false starts\n• "It's kind of like... what happens when, you know, the gradient explodes."\n\nWRITTEN (ITP reading): formal, nominalizations, passive\n• "Gradient explosion occurs when the partial derivatives in the update rule diverge."\n\nNOMINALIZATIONS (habla académica oral también las usa):\n• analyze → analysis | develop → development | apply → application\n• "The *application* of attention mechanisms..." (not "applying attention")\n\nHEDGE VOCABULARY (marcan grado de certeza — importante en attitude questions):\n• Strong claim: "demonstrates", "proves", "clearly indicates"\n• Hedged claim: "suggests", "may indicate", "appears to", "tends to"\n• Weak/speculative: "might", "could possibly", "it is conceivable that"\n\nSaber el nivel de hedge = responder attitude/function questions correctamente`,search:`"academic English spoken written register differences TOEFL" | "hedging language academic vocabulary TOEFL listening"`,toefl:"Las preguntas de actitud del Listening dependen de reconocer estos marcadores de certeza. En Written Expression, usar el hedge correcto evita errores de registro.",ml:"En entrevistas, calibrar tu hedge ('this approach tends to work well when...' vs. 'this always works') comunica madurez técnica y honestidad intelectual."},
 {n:28,type:"review",title:"Week 4 Review: Structure Mastery Checklist + ML Vocabulary Audit",focus:"Review — TOEFL ITP + ML Vocabulary Consolidation",teoria:`STRUCTURE MASTER CHECKLIST (semanas 1-4):\n☐ Parallel structures\n☐ SVA: Each/one of + inversion + appositive\n☐ Relative clauses: which/that + dangling modifier + reduction\n☐ Noun clauses: that/what + embedded question order\n☐ Conditionals: type 0-3 + inverted form\n☐ Gerund/infinitive: verb lists + meaning-change pairs\n☐ Passive: formation + stative verb exceptions\n☐ Appositive phrases + false pluralizers\n\nML VOCABULARY AUDIT — ¿Puedes definir y usar en oración?\n☐ training-serving skew | ☐ concept drift | ☐ data leakage\n☐ precision/recall trade-off | ☐ AUC-ROC vs. PR-AUC\n☐ LoRA / QLoRA | ☐ RAG architecture | ☐ canary deployment\n☐ feature store | ☐ counterfactual | ☐ regularization\n\nTASK: Para cada término que NO puedas usar fluidamente, escribe 2 oraciones de contexto en tu cuaderno.`,search:`"TOEFL ITP structure written expression complete rule list" | "ML engineer technical vocabulary flashcards Anki"`,toefl:"Una auditoría explícita de qué dominas y qué no es más valiosa que 2 horas de práctica sin foco. Identifica los 2-3 puntos débiles y duplica tiempo en ellos.",ml:"El vocabulario técnico preciso en inglés es un filtro en entrevistas remotas. Los entrevistadores nativos detectan inmediatamente cuando el candidato parafrasea porque no recuerda el término correcto."}
 ]},
@@ -98,7 +544,7 @@ const weeks=[
 {n:32,type:"toefl",title:"TOEFL Structure: Clauses of Purpose, Result & Concession",focus:"TOEFL ITP — Structure & Written Expression",teoria:`SUBORDINATING CONJUNCTIONS — CATEGORÍAS PARA EXAMEN:\n\nPURPOSE (para qué):\n• so that / in order that + [subject + can/could/may/might]\n• "The model was regularized so that it would generalize better."\n• ≠ "so that + would" cuando el sujeto es el mismo → usar "in order to + infinitive"\n\nRESULT (tanto que):\n• so + adj/adv + that: "The model was so accurate that deployment was approved."\n• such + noun phrase + that: "It was such a large dataset that preprocessing took 48 hours."\n\nCONCESSION (aunque):\n• Although / Even though / While + [complete clause]\n• Despite / In spite of + [noun phrase or gerund] — NO full clause\n  WRONG: "Despite that the data was noisy..." → Despite the noisy data / Despite noise\n• Nevertheless / However → connect independent clauses (use semicolon or new sentence)\n\nTRAMPA: "Despite of" → NO EXISTE en inglés. Siempre "Despite [noun]"`,search:`"TOEFL ITP subordinating conjunctions despite although result clause" | "concession clauses despite although difference TOEFL"`,toefl:"'Despite of' es uno de los errores más frecuentes de candidatos avanzados en Written Expression. Eliminarlo solo vale 1-2 puntos seguros.",ml:"'Although the model performs well in-distribution, it struggles with tail cases' — la estructura de concesión es esencial para comunicar matices técnicos."},
 {n:33,type:"ml",title:"STAR Stories: Building Your ML Interview Story Bank",focus:"ML Engineering — Interview Prep / Behavioral",teoria:`BANK DE 5 HISTORIAS STAR PARA ML:\nPrepara y memoriza UNA historia para cada categoría:\n\n1. TECHNICAL CHALLENGE: "A model that underperformed and how you fixed it"\n   → S: imbalanced dataset, 95% majority class\n   → T: improve recall on minority class without sacrificing precision\n   → A: SMOTE + class weights + PR-AUC as primary metric\n   → R: recall increased 40% with <2% precision drop\n\n2. COLLABORATION/DISAGREEMENT: "Tech decision you disagreed with"\n   → Frame: "I respectfully pushed back because the data showed..."\n\n3. FAILURE/LEARNING: "A model that failed in production"\n   → Frame: "The root cause was training-serving skew; I implemented..."\n\n4. AMBIGUITY: "An ML problem with unclear requirements"\n   → Frame: "I ran a scoping workshop to align on the metric..."\n\n5. IMPACT AT SCALE: "Your most impactful ML project"\n   → Always quantify: "This reduced [cost/latency] by X% / served Y users"\n\nPRACTICE: Graba en voz alta cada historia. Target: 90-120 segundos por historia, sin "ums".`,search:`"ML engineer behavioral interview STAR method stories examples" | "machine learning engineer tell me about yourself answer"`,toefl:"La estructura STAR (Situation → Task → Action → Result) entrena la narración causal secuencial — la misma lógica que los pasajes de causa-efecto del TOEFL.",ml:"Tener 5 historias STAR memorized y pulidas significa que en la entrevista destinas energía cognitiva a adaptarlas, no a construirlas desde cero bajo presión."},
 {n:34,type:"toefl",title:"TOEFL Reading: Process of Elimination — Advanced Application",focus:"TOEFL ITP — Reading Comprehension",teoria:`ELIMINACIÓN AVANZADA — LOS 5 TIPOS DE DISTRACTOR:\n\n1. TOO EXTREME: usa "always", "never", "all", "completely"\n   → Pasajes académicos hedgean. Si la respuesta no hedgea, desconfía.\n\n2. TOO NARROW: menciona solo un detalle del párrafo, no la idea principal\n   → Para preguntas de Main Idea, esto es trampa segura\n\n3. TOO BROAD: va más allá de lo que el pasaje cubre\n   → "The author implies that all ML models are biased" — pasaje solo discute uno\n\n4. OPPOSITE: invierte la relación del texto\n   → Frecuente en cause-effect: el efecto se presenta como causa\n\n5. OUT OF SCOPE: correcto en el mundo real pero no mencionado en el texto\n   → REGLA DE ORO: si no está en el pasaje, no existe para el ITP\n\nCUANDO QUEDAN 2 OPCIONES VIABLES:\n→ La más específica, más hedgeada, y más cercana al texto = correcta`,search:`"TOEFL ITP reading process of elimination wrong answer types" | "TOEFL reading distractor analysis technique advanced"`,toefl:"Reconocer los 5 tipos de distractor convierte las preguntas difíciles de Reading en ejercicios de clasificación. Reduce errores en un 30-40% en pasajes difíciles.",ml:"Esta mentalidad de 'eliminación activa' es la misma que un MLE usa al debuggear: descartar hipótesis sistemáticamente hasta identificar la causa raíz."},
-{n:35,type:"review",title:"Full TOEFL ITP Mock Exam (Timed, Conditions Reales)",focus:"Review — Full Mock TOEFL ITP",teoria:`MOCK EXAM COMPLETO — 115 MIN EXACTOS:\n\nCONDICIONES:\n• Sin pausa. Sin diccionario. Sin notas previas.\n• Simula el orden real del ITP\n\nORDEN REAL DEL TOEFL ITP:\n1. Listening Comprehension: 30-40 min\n   - Part A: ~30 short dialogues\n   - Part B: ~8 long conversations\n   - Part C: ~3 lectures\n\n2. Structure & Written Expression: 25 min\n   - Structure: 15 items\n   - Written Expression: 25 items\n\n3. Reading Comprehension: 55 min\n   - 5 passages, ~10 questions each\n\nSCORING PBI (Scaled Score):\n• Each section: 31-68\n• Total ITP: 310-677\n• C1 target: 543+ (approx. based on CEFR mapping)\n\nPOST-MOCK PROTOCOL:\n1. Score each section\n2. Error log: categorize each wrong answer\n3. Pattern ID: which section / question type dominates errors?\n4. Week 6 adjustment: double time on weakest area`,search:`"TOEFL ITP free full practice test PDF with audio" | "TOEFL ITP complete practice test Longman Barron's"`,toefl:"Un mock timed completo es el único indicador real de tu puntaje actual. Sin él, el estudio es cualitativo — con él, es cuantitativo.",ml:"La capacidad de rendir bajo presión de tiempo es también lo que diferencia a candidatos en entrevistas live coding y design challenges."}
+{n:35,type:"review",title:"Full TOEFL ITP Mock Exam (Timed, Condiciones Reales)",focus:"Review — Full Mock TOEFL ITP",teoria:`MOCK EXAM COMPLETO — 115 MIN EXACTOS:\n\nCONDICIONES:\n• Sin pausa. Sin diccionario. Sin notas previas.\n• Simula el orden real del ITP\n\nORDEN REAL DEL TOEFL ITP:\n1. Listening Comprehension: 30-40 min\n   - Part A: ~30 short dialogues\n   - Part B: ~8 long conversations\n   - Part C: ~3 lectures\n\n2. Structure & Written Expression: 25 min\n   - Structure: 15 items\n   - Written Expression: 25 items\n\n3. Reading Comprehension: 55 min\n   - 5 passages, ~10 questions each\n\nSCORING PBI (Scaled Score):\n• Each section: 31-68\n• Total ITP: 310-677\n• C1 target: 543+ (approx. based on CEFR mapping)\n\nPOST-MOCK PROTOCOL:\n1. Score each section\n2. Error log: categorize each wrong answer\n3. Pattern ID: which section / question type dominates errors?\n4. Week 6 adjustment: double time on weakest area`,search:`"TOEFL ITP free full practice test PDF with audio" | "TOEFL ITP complete practice test Longman Barron's"`,toefl:"Un mock timed completo es el único indicador real de tu puntaje actual. Sin él, el estudio es cualitativo — con él, es cuantitativo.",ml:"La capacidad de rendir bajo presión de tiempo es también lo que diferencia a candidatos en entrevistas live coding y design challenges."}
 ]},
 {title:"Semana 6 — Días 36–42: Error Correction & Advanced Refinement",days:[
 {n:36,type:"toefl",title:"TOEFL Structure: Comparative & Superlative Structures in Academic Writing",focus:"TOEFL ITP — Structure & Written Expression",teoria:`COMPARATIVES — PATRONES ACADÉMICOS:\n\nREGULAR:\n• 1-2 syllables: faster, simpler, larger\n• 3+ syllables: more accurate, more efficient, more robust\n\nIRREGULAR (memorizar):\n• good → better → best | bad → worse → worst\n• far → further (degree) / farther (distance) → furthest/farthest\n• little → less → least | many/much → more → most\n\nTRAMPAS EN WRITTEN EXPRESSION:\n1. Double comparative: "more faster" → "faster"\n2. Illogical comparison: "The accuracy of Model A is higher than Model B."\n   → ERROR: comparas accuracy con model. FIX: "...higher than that of Model B."\n3. Superlative + present perfect: "X is the most accurate model [that] has ever been proposed."\n4. "As...as" negativos: "not as accurate as" (no "not so accurate as" — less formal)\n\nACADEMIC PATTERNS:\n"X outperforms Y by a significant margin."\n"X is comparable to / on par with Y in terms of accuracy."`,search:`"TOEFL ITP comparative superlative written expression traps" | "illogical comparison TOEFL structure section examples"`,toefl:"La comparación ilógica ('accuracy de A > model B') es una trampa sofisticada que aparece exactamente en los ítems de dificultad alta del Written Expression.",ml:"'Our model outperforms the baseline by 3.2% on NDCG@10, comparable to state-of-the-art on this benchmark' — las comparaciones precisas son el estándar de los papers y las presentaciones técnicas."},
@@ -116,57 +562,281 @@ const weeks=[
 ]}
 ];
 
-let currentWeek=0;
-function renderNav(){
-const nav=document.getElementById('nav');
-nav.innerHTML='';
-weeks.forEach((w,i)=>{
-const b=document.createElement('button');
-b.className='week-btn'+(i===currentWeek?' active':'');
-b.textContent=`Semana ${i+1}`;
-if(i===6) b.textContent='Final';
-b.onclick=()=>{currentWeek=i;renderWeek();renderNav();updateProgress()};
-nav.appendChild(b);
-});
+/* ═══════════════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════════════ */
+const LS_KEY = 'study45_done_days';
+let currentWeek = 0;
+let activeFilter = 'all';
+let searchQuery = '';
+
+function getCompleted(){
+  try{ return JSON.parse(localStorage.getItem(LS_KEY)||'[]'); }
+  catch(e){ return []; }
 }
-function typeBadge(type){
-if(type==='toefl') return '<span class="badge b-toefl">TOEFL ITP</span>';
-if(type==='ml') return '<span class="badge b-ml">ML Engineering</span>';
-return '<span class="badge b-review">Review / Mock</span>';
+function saveCompleted(arr){ localStorage.setItem(LS_KEY, JSON.stringify(arr)); }
+function isDone(n){ return getCompleted().includes(n); }
+function toggleDone(n){
+  const arr = getCompleted();
+  const idx = arr.indexOf(n);
+  if(idx>-1) arr.splice(idx,1); else arr.push(n);
+  saveCompleted(arr);
 }
-function renderWeek(){
-const c=document.getElementById('days-container');
-c.innerHTML='';
-const w=weeks[currentWeek];
-const wh=document.createElement('div');
-wh.className='week-header';
-wh.textContent=w.title;
-c.appendChild(wh);
-w.days.forEach(d=>{
-const card=document.createElement('div');
-card.className='day-card';
-card.innerHTML=`<div class="day-top"><span class="day-num">Día ${d.n}</span>${typeBadge(d.type)}<span class="day-title">${d.title}</span><i class="ti ti-chevron-down" style="font-size:16px;color:var(--color-text-tertiary);margin-left:auto" aria-hidden="true"></i></div>
-<div class="day-body">
-<div class="field"><div class="field-label">Enfoque del día</div><div class="field-val">${d.focus}</div></div>
-<div class="field"><div class="field-label">Teoría clave para el cuaderno</div><div class="field-val" style="white-space:pre-wrap;font-family:var(--font-mono);font-size:12px;background:var(--color-background-secondary);padding:10px 12px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary)">${d.teoria}</div></div>
-<div class="field"><div class="field-label">Búsqueda sugerida (YouTube / Web)</div><div class="field-val">${d.search.split(' | ').map(s=>`<span class="search-tag">${s}</span>`).join('')}</div></div>
-<div class="dual">
-<div class="dual-box"><div class="field-label" style="color:#3C3489">Valor TOEFL ITP</div><div class="field-val" style="font-size:12px">${d.toefl}</div></div>
-<div class="dual-box"><div class="field-label" style="color:#085041">Valor ML Engineering</div><div class="field-val" style="font-size:12px">${d.ml}</div></div>
-</div>
-</div>`;
-card.querySelector('.day-top').onclick=()=>{card.classList.toggle('expanded')};
-c.appendChild(card);
-});
+
+/* flat list of all days */
+const allDays = weeks.flatMap(w => w.days);
+
+/* ═══════════════════════════════════════════════════
+   NAV
+═══════════════════════════════════════════════════ */
+function buildNav(){
+  const sideEl = document.getElementById('sidebar-week-nav');
+  const mobileEl = document.getElementById('mobile-week-nav');
+  sideEl.innerHTML=''; mobileEl.innerHTML='';
+  weeks.forEach((w,i)=>{
+    const label = i===6 ? 'Semana Final (43-45)' : `Sem ${i+1} — Días ${w.days[0].n}–${w.days[w.days.length-1].n}`;
+    const done = w.days.filter(d=>isDone(d.n)).length;
+    const total = w.days.length;
+    ['side','mobile'].forEach(prefix=>{
+      const btn = document.createElement('button');
+      btn.className='week-nav-btn'+(i===currentWeek?' active':'');
+      btn.innerHTML=`<span class="wk-num">${i===6?'★':`W${i+1}`}</span>${label}<span class="wk-prog">${done}/${total}</span>`;
+      btn.onclick=()=>{ currentWeek=i; renderAll(); };
+      (prefix==='side'?sideEl:mobileEl).appendChild(btn);
+    });
+  });
 }
+
+/* ═══════════════════════════════════════════════════
+   PROGRESS
+═══════════════════════════════════════════════════ */
 function updateProgress(){
-const total=weeks.length;
-const pct=Math.round(((currentWeek)/total)*100);
-document.getElementById('prog-fill').style.width=pct+'%';
-const labels=['Semana 1 de 7','Semana 2 de 7','Semana 3 de 7','Semana 4 de 7','Semana 5 de 7','Semana 6 de 7','Semana final'];
-document.getElementById('prog-label').textContent=labels[currentWeek]||'';
+  const done = getCompleted().length;
+  const total = 45;
+  const pct = Math.round((done/total)*100);
+  const circumference = 2*Math.PI*50;
+  const offset = circumference*(1-done/total);
+  const ringFill = document.getElementById('ring-fill');
+  if(ringFill){ ringFill.style.strokeDashoffset=offset; }
+  const ringPct = document.getElementById('ring-pct');
+  if(ringPct) ringPct.textContent=pct+'%';
+  const ringDays = document.getElementById('ring-days');
+  if(ringDays) ringDays.textContent=`${done} / ${total} días`;
+  const doneCount = document.getElementById('done-count');
+  if(doneCount) doneCount.textContent=done;
+  const streakText = document.getElementById('streak-text');
+  if(streakText){
+    if(done===0) streakText.textContent='Comienza marcando tu primer día ✓';
+    else if(done===45) streakText.textContent='¡Programa completado! 🎉';
+    else streakText.textContent=`${total-done} días restantes`;
+  }
+  /* mobile */
+  const mPct = document.getElementById('mobile-pct');
+  if(mPct) mPct.textContent=pct+'%';
+  const mRing = document.getElementById('mobile-ring-fill');
+  if(mRing){
+    const c2=2*Math.PI*14;
+    mRing.style.strokeDasharray=c2;
+    mRing.style.strokeDashoffset=c2*(1-done/total);
+  }
 }
-renderNav();
-renderWeek();
-updateProgress();
+
+/* ═══════════════════════════════════════════════════
+   HEATMAP
+═══════════════════════════════════════════════════ */
+function buildHeatmap(){
+  const el = document.getElementById('heatmap');
+  if(!el) return;
+  el.innerHTML='';
+  allDays.forEach(d=>{
+    const dot = document.createElement('div');
+    dot.className=`hm-dot ${d.type}${isDone(d.n)?' done':''}`;
+    dot.title=`Día ${d.n}: ${d.title}`;
+    dot.onclick=()=>{ currentWeek=weeks.findIndex(w=>w.days.some(x=>x.n===d.n)); renderAll(); };
+    el.appendChild(dot);
+  });
+}
+
+/* ═══════════════════════════════════════════════════
+   CATEGORY COUNTS
+═══════════════════════════════════════════════════ */
+function updateCounts(){
+  ['toefl','ml','review'].forEach(type=>{
+    const days=allDays.filter(d=>d.type===type);
+    const done=days.filter(d=>isDone(d.n)).length;
+    const el=document.getElementById(`cnt-${type}`);
+    if(el) el.textContent=`${done}/${days.length}`;
+  });
+}
+
+/* ═══════════════════════════════════════════════════
+   FILTER
+═══════════════════════════════════════════════════ */
+function applyFilter(f, btn){
+  activeFilter=f;
+  document.querySelectorAll('.filter-btn, .legend-item').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  /* also activate corresponding control button */
+  document.querySelectorAll(`[data-filter="${f}"]`).forEach(b=>b.classList.add('active'));
+  applyVisibility();
+}
+
+function applyVisibility(){
+  const q = searchQuery.toLowerCase();
+  document.querySelectorAll('.day-card').forEach(card=>{
+    const type=card.dataset.type;
+    const n=parseInt(card.dataset.n);
+    const title=card.dataset.title||'';
+    const teoria=card.dataset.teoria||'';
+    /* filter match */
+    let filterMatch=true;
+    if(activeFilter==='toefl') filterMatch=type==='toefl';
+    else if(activeFilter==='ml') filterMatch=type==='ml';
+    else if(activeFilter==='review') filterMatch=type==='review';
+    else if(activeFilter==='done') filterMatch=isDone(n);
+    else if(activeFilter==='pending') filterMatch=!isDone(n);
+    /* search match */
+    let searchMatch=true;
+    if(q) searchMatch=title.toLowerCase().includes(q)||teoria.toLowerCase().includes(q);
+    card.classList.toggle('hidden',!(filterMatch&&searchMatch));
+  });
+  /* show no-results per week */
+  document.querySelectorAll('.week-section').forEach(sec=>{
+    const visible=[...sec.querySelectorAll('.day-card')].some(c=>!c.classList.contains('hidden'));
+    let nr=sec.querySelector('.no-results');
+    if(!visible){
+      if(!nr){
+        nr=document.createElement('div');
+        nr.className='no-results';
+        nr.innerHTML='<div class="nr-icon">🔍</div>No hay días que coincidan con este filtro.';
+        sec.querySelector('.days-list').appendChild(nr);
+      }
+    } else { if(nr) nr.remove(); }
+  });
+}
+
+/* ═══════════════════════════════════════════════════
+   RENDER CONTENT
+═══════════════════════════════════════════════════ */
+function typeBadgeText(type){
+  if(type==='toefl') return 'TOEFL ITP';
+  if(type==='ml') return 'ML Engineering';
+  return 'Review / Mock';
+}
+
+function renderContent(){
+  const area=document.getElementById('content-area');
+  area.innerHTML='';
+  const w=weeks[currentWeek];
+
+  /* Week header */
+  const wh=document.createElement('div');
+  wh.className='week-header';
+  const wIdx = currentWeek===6?'★':`W${currentWeek+1}`;
+  const doneW=w.days.filter(d=>isDone(d.n)).length;
+  wh.innerHTML=`<span class="week-header-num">${wIdx}</span><span class="week-header-title">${w.title}</span><div class="week-header-line"></div><span class="week-header-count">${doneW}/${w.days.length} completados</span>`;
+  area.appendChild(wh);
+
+  const section=document.createElement('div');
+  section.className='week-section';
+  const list=document.createElement('div');
+  list.className='days-list';
+  section.appendChild(list);
+
+  w.days.forEach(d=>{
+    const card=document.createElement('div');
+    card.className=`day-card ${d.type}${isDone(d.n)?' done-card':''}`;
+    card.dataset.type=d.type;
+    card.dataset.n=d.n;
+    card.dataset.title=d.title;
+    card.dataset.teoria=d.teoria;
+
+    const tags=d.search.split(' | ').map(s=>`<span class="search-tag">${s.trim()}</span>`).join('');
+
+    card.innerHTML=`
+      <div class="card-top">
+        <span class="day-num-badge">D${String(d.n).padStart(2,'0')}</span>
+        <span class="type-badge">${typeBadgeText(d.type)}</span>
+        <span class="card-title">${d.title}</span>
+        <div class="card-actions">
+          <button class="check-btn" title="${isDone(d.n)?'Marcar como pendiente':'Marcar como completado'}" aria-label="toggle completado">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </button>
+          <svg class="chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-body-inner">
+          <div class="focus-row">
+            <svg class="focus-icon" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span class="focus-text">${d.focus}</span>
+          </div>
+          <div class="teoria-block">
+            <div class="block-label">Teoría clave</div>
+            <pre class="teoria-text">${d.teoria}</pre>
+          </div>
+          <div class="search-block">
+            <div class="block-label" style="margin-bottom:8px">Búsquedas sugeridas</div>
+            <div class="tags-wrap">${tags}</div>
+          </div>
+          <div class="dual-grid">
+            <div class="dual-box toefl-box">
+              <div class="dual-label">Valor TOEFL ITP</div>
+              <div class="dual-text">${d.toefl}</div>
+            </div>
+            <div class="dual-box ml-box">
+              <div class="dual-label">Valor ML Engineering</div>
+              <div class="dual-text">${d.ml}</div>
+            </div>
+          </div>
+        </div>
+      </div>`;
+
+    /* Toggle expand */
+    card.querySelector('.card-top').addEventListener('click', e=>{
+      if(e.target.closest('.check-btn')) return;
+      card.classList.toggle('expanded');
+    });
+
+    /* Toggle done */
+    card.querySelector('.check-btn').addEventListener('click', e=>{
+      e.stopPropagation();
+      toggleDone(d.n);
+      renderAll();
+    });
+
+    list.appendChild(card);
+  });
+  area.appendChild(section);
+}
+
+/* ═══════════════════════════════════════════════════
+   RENDER ALL
+═══════════════════════════════════════════════════ */
+function renderAll(){
+  buildNav();
+  renderContent();
+  updateProgress();
+  buildHeatmap();
+  updateCounts();
+  applyVisibility();
+}
+
+/* ═══════════════════════════════════════════════════
+   SEARCH
+═══════════════════════════════════════════════════ */
+document.getElementById('search-input').addEventListener('input', e=>{
+  searchQuery=e.target.value;
+  applyVisibility();
+});
+
+/* ═══════════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════════ */
+renderAll();
+
+/* Restore filter btn active state */
+document.querySelector('[data-filter="all"]').classList.add('active');
 </script>
+</body>
+</html>
