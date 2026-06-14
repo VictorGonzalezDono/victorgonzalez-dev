@@ -1,1173 +1,172 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Growth Engineer & Data Scientist — Portfolio</title>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet" />
 
 <style>
-  /* ── RESET & BASE ──────────────────────────────────────────── */
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --bg:        #0a0f1e;
-    --surface:   #0f172a;
-    --card:      #111827;
-    --border:    rgba(255,255,255,0.06);
-    --border-h:  rgba(15,118,110,0.35);
-    --text:      #f1f5f9;
-    --muted:     #64748b;
-    --accent:    #0f766e;
-    --accent-l:  #14b8a6;
-    --accent-d:  #0d5c56;
-    --serif:     'DM Serif Display', Georgia, serif;
-    --sans:      'DM Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--sans);
-    font-size: 16px;
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
-    cursor: none;
-  }
-
-  /* ── CUSTOM CURSOR ─────────────────────────────────────────── */
-  #cursor-dot {
-    width: 6px; height: 6px;
-    background: var(--accent-l);
-    border-radius: 50%;
-    position: fixed; top: 0; left: 0;
-    pointer-events: none; z-index: 9999;
-    transition: transform 0.08s ease, opacity 0.3s;
-    transform: translate(-50%, -50%);
-  }
-  #cursor-ring {
-    width: 30px; height: 30px;
-    border: 1px solid rgba(20,184,166,0.4);
-    border-radius: 50%;
-    position: fixed; top: 0; left: 0;
-    pointer-events: none; z-index: 9998;
-    transition: transform 0.18s ease, width 0.2s, height 0.2s, border-color 0.2s;
-    transform: translate(-50%, -50%);
-  }
-  body:hover #cursor-dot { opacity: 1; }
-
-  /* ── NOISE OVERLAY ─────────────────────────────────────────── */
-  body::before {
-    content: '';
-    position: fixed; inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
-    opacity: 0.025;
-    pointer-events: none; z-index: 1000;
-  }
-
-  /* ── NAV ───────────────────────────────────────────────────── */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 500;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 48px;
-    height: 64px;
-    background: rgba(10,15,30,0.7);
-    backdrop-filter: blur(20px) saturate(1.4);
-    border-bottom: 1px solid var(--border);
-    transition: background 0.3s;
-  }
-  .nav-logo {
-    font-family: var(--serif);
-    font-size: 1.05rem;
-    letter-spacing: 0.02em;
-    color: var(--text);
-    text-decoration: none;
-  }
-  .nav-logo span { color: var(--accent-l); }
-  .nav-links { display: flex; gap: 36px; list-style: none; }
-  .nav-links a {
-    font-size: 0.78rem;
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted);
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-  .nav-links a:hover { color: var(--accent-l); }
-  .nav-cta {
-    font-size: 0.78rem; font-weight: 500;
-    letter-spacing: 0.08em; text-transform: uppercase;
-    color: var(--accent-l);
-    border: 1px solid rgba(20,184,166,0.3);
-    padding: 7px 20px; border-radius: 3px;
-    text-decoration: none;
-    transition: background 0.2s, border-color 0.2s, color 0.2s;
-  }
-  .nav-cta:hover {
-    background: rgba(20,184,166,0.08);
-    border-color: var(--accent-l);
-    color: #fff;
-  }
-  .nav-mobile-btn { display: none; background: none; border: none; cursor: none; }
-
-  /* ── HERO ──────────────────────────────────────────────────── */
-  #hero {
-    position: relative;
-    min-height: 100vh;
-    display: flex; align-items: center;
-    padding: 120px 48px 80px;
-    overflow: hidden;
-  }
-
-  /* Gradient orbs */
-  .orb {
-    position: absolute; border-radius: 50%;
-    filter: blur(120px); pointer-events: none; z-index: 0;
-  }
-  .orb-1 {
-    width: 600px; height: 600px;
-    background: radial-gradient(circle, rgba(15,118,110,0.18) 0%, transparent 70%);
-    top: -200px; right: -100px;
-    animation: float1 18s ease-in-out infinite;
-  }
-  .orb-2 {
-    width: 400px; height: 400px;
-    background: radial-gradient(circle, rgba(20,184,166,0.08) 0%, transparent 70%);
-    bottom: 0px; left: 10%;
-    animation: float2 22s ease-in-out infinite;
-  }
-  @keyframes float1 {
-    0%,100% { transform: translate(0,0) scale(1); }
-    50%      { transform: translate(-40px, 60px) scale(1.08); }
-  }
-  @keyframes float2 {
-    0%,100% { transform: translate(0,0); }
-    50%      { transform: translate(30px,-50px); }
-  }
-
-  /* Grid lines */
-  .grid-lines {
-    position: absolute; inset: 0;
-    background-image:
-      linear-gradient(rgba(255,255,255,0.024) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.024) 1px, transparent 1px);
-    background-size: 72px 72px;
-    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
-  }
-
-  .hero-inner {
-    position: relative; z-index: 2;
-    max-width: 900px;
-  }
-
-  .hero-badge {
-    display: inline-flex; align-items: center; gap: 8px;
-    border: 1px solid rgba(20,184,166,0.25);
-    background: rgba(20,184,166,0.05);
-    border-radius: 100px;
-    padding: 5px 14px 5px 10px;
-    margin-bottom: 40px;
-    opacity: 0; animation: fadeUp 0.8s 0.1s forwards;
-  }
-  .badge-dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: var(--accent-l);
-    box-shadow: 0 0 8px var(--accent-l);
-    animation: pulse 2.5s ease-in-out infinite;
-  }
-  @keyframes pulse {
-    0%,100% { opacity:1; box-shadow: 0 0 8px var(--accent-l); }
-    50%      { opacity:0.5; box-shadow: 0 0 16px var(--accent-l); }
-  }
-  .badge-text {
-    font-size: 0.72rem; font-weight: 500;
-    letter-spacing: 0.12em; text-transform: uppercase;
-    color: var(--accent-l);
-  }
-
-  .hero-title {
-    font-family: var(--serif);
-    font-size: clamp(2.6rem, 6vw, 5rem);
-    font-weight: 400;
-    line-height: 1.06;
-    letter-spacing: -0.01em;
-    color: var(--text);
-    margin-bottom: 28px;
-    opacity: 0; animation: fadeUp 0.9s 0.2s forwards;
-  }
-  .hero-title em {
-    font-style: italic;
-    color: var(--accent-l);
-    background: linear-gradient(135deg, #0f766e, #14b8a6, #5eead4);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .hero-sub {
-    font-size: clamp(0.95rem, 1.8vw, 1.1rem);
-    font-weight: 300;
-    line-height: 1.75;
-    color: var(--muted);
-    max-width: 640px;
-    margin-bottom: 52px;
-    opacity: 0; animation: fadeUp 0.9s 0.35s forwards;
-  }
-  .hero-sub strong { color: rgba(241,245,249,0.75); font-weight: 400; }
-
-  .hero-actions {
-    display: flex; gap: 16px; flex-wrap: wrap;
-    opacity: 0; animation: fadeUp 0.9s 0.5s forwards;
-  }
-
-  .btn-primary {
-    display: inline-flex; align-items: center; gap: 10px;
-    background: var(--accent);
-    color: #fff;
-    padding: 14px 28px;
-    border-radius: 4px;
-    font-size: 0.82rem; font-weight: 500;
-    letter-spacing: 0.06em; text-transform: uppercase;
-    text-decoration: none;
-    border: 1px solid transparent;
-    transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
-    cursor: none;
-  }
-  .btn-primary:hover {
-    background: #0d6b63;
-    box-shadow: 0 0 30px rgba(15,118,110,0.4);
-    transform: translateY(-1px);
-  }
-  .btn-primary svg { transition: transform 0.2s; }
-  .btn-primary:hover svg { transform: translateY(2px); }
-
-  .btn-ghost {
-    display: inline-flex; align-items: center; gap: 8px;
-    color: var(--muted);
-    padding: 14px 24px;
-    border-radius: 4px;
-    font-size: 0.82rem; font-weight: 500;
-    letter-spacing: 0.06em; text-transform: uppercase;
-    text-decoration: none;
-    border: 1px solid var(--border);
-    transition: color 0.2s, border-color 0.2s, background 0.2s;
-    cursor: none;
-  }
-  .btn-ghost:hover { color: var(--text); border-color: rgba(255,255,255,0.12); background: rgba(255,255,255,0.03); }
-
-  .hero-metrics {
-    position: absolute; right: 48px; bottom: 80px; z-index: 2;
-    display: flex; flex-direction: column; gap: 2px;
-    opacity: 0; animation: fadeIn 1s 0.8s forwards;
-  }
-  .metric-item {
-    display: flex; align-items: baseline; gap: 8px;
-    padding: 10px 20px;
-    background: rgba(255,255,255,0.025);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    backdrop-filter: blur(10px);
-  }
-  .metric-item:first-child { border-color: rgba(20,184,166,0.15); background: rgba(20,184,166,0.04); }
-  .metric-num { font-family: var(--serif); font-size: 1.6rem; color: var(--text); }
-  .metric-label { font-size: 0.7rem; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes fadeIn {
-    from { opacity: 0; } to { opacity: 1; }
-  }
-
-  /* ── SCROLL INDICATOR ──────────────────────────────────────── */
-  .scroll-hint {
-    position: absolute; bottom: 36px; left: 50%;
-    transform: translateX(-50%);
-    display: flex; flex-direction: column; align-items: center; gap: 8px;
-    opacity: 0; animation: fadeIn 1s 1.2s forwards;
-  }
-  .scroll-hint span { font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
-  .scroll-line {
-    width: 1px; height: 40px;
-    background: linear-gradient(to bottom, var(--accent-l), transparent);
-    animation: lineGrow 2s ease-in-out infinite;
-  }
-  @keyframes lineGrow {
-    0%   { transform: scaleY(0); transform-origin: top; opacity: 1; }
-    50%  { transform: scaleY(1); transform-origin: top; opacity: 1; }
-    100% { transform: scaleY(1); transform-origin: bottom; opacity: 0; }
-  }
-
-  /* ── SECTION COMMONS ───────────────────────────────────────── */
-  section { padding: 120px 48px; position: relative; }
-  .section-label {
-    display: inline-flex; align-items: center; gap: 12px;
-    font-size: 0.68rem; font-weight: 600;
-    letter-spacing: 0.18em; text-transform: uppercase;
-    color: var(--accent-l);
-    margin-bottom: 24px;
-  }
-  .section-label::before {
-    content: '';
-    width: 28px; height: 1px;
-    background: var(--accent-l);
-  }
-  .section-title {
-    font-family: var(--serif);
-    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
-    font-weight: 400;
-    line-height: 1.15;
-    color: var(--text);
-    max-width: 700px;
-  }
-  .section-title em { font-style: italic; color: var(--accent-l); }
-  .section-intro {
-    font-size: 1rem; font-weight: 300;
-    line-height: 1.8; color: var(--muted);
-    max-width: 580px; margin-top: 16px;
-  }
-  .divider { height: 1px; background: var(--border); margin: 0 48px; }
-
-  /* ── FRAMEWORK ─────────────────────────────────────────────── */
-  #framework { background: var(--surface); }
-  .framework-header { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 32px; margin-bottom: 64px; }
-
-  .framework-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    overflow: hidden;
-  }
-
-  .fw-card {
-    background: var(--card);
-    padding: 44px 36px;
-    position: relative;
-    transition: background 0.3s;
-    overflow: hidden;
-  }
-  .fw-card::before {
-    content: '';
-    position: absolute; top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--accent), transparent);
-    opacity: 0;
-    transition: opacity 0.4s;
-  }
-  .fw-card:hover { background: rgba(15,23,42,0.8); }
-  .fw-card:hover::before { opacity: 1; }
-
-  .fw-num {
-    font-family: var(--serif);
-    font-size: 0.75rem;
-    letter-spacing: 0.12em;
-    color: var(--accent-l);
-    margin-bottom: 28px;
-    display: block;
-  }
-  .fw-title {
-    font-size: 0.72rem; font-weight: 600;
-    letter-spacing: 0.15em; text-transform: uppercase;
-    color: var(--text); margin-bottom: 16px;
-  }
-  .fw-body { font-size: 0.9rem; font-weight: 300; line-height: 1.8; color: var(--muted); }
-
-  .fw-icon {
-    position: absolute; bottom: 28px; right: 28px;
-    width: 36px; height: 36px;
-    border-radius: 50%;
-    border: 1px solid var(--border-h);
-    display: flex; align-items: center; justify-content: center;
-    color: var(--accent);
-    transition: border-color 0.3s, color 0.3s;
-  }
-  .fw-card:hover .fw-icon { border-color: var(--accent-l); color: var(--accent-l); }
-
-  /* ── VENTURES ──────────────────────────────────────────────── */
-  #ventures { background: var(--bg); }
-  .ventures-header { margin-bottom: 64px; }
-
-  .ventures-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    overflow: hidden;
-  }
-
-  .v-card {
-    background: var(--card);
-    padding: 48px 40px;
-    position: relative;
-    transition: background 0.3s;
-    cursor: none;
-    overflow: hidden;
-  }
-  .v-card:nth-child(3) { grid-column: span 2; }
-
-  .v-card::after {
-    content: '';
-    position: absolute; inset: 0;
-    background: radial-gradient(circle at 20% 80%, rgba(15,118,110,0.06) 0%, transparent 60%);
-    opacity: 0; transition: opacity 0.5s;
-    pointer-events: none;
-  }
-  .v-card:hover { background: #0d1424; }
-  .v-card:hover::after { opacity: 1; }
-
-  .v-tag {
-    display: inline-block;
-    font-size: 0.62rem; font-weight: 600;
-    letter-spacing: 0.14em; text-transform: uppercase;
-    color: var(--accent-l);
-    border: 1px solid rgba(20,184,166,0.2);
-    background: rgba(20,184,166,0.04);
-    border-radius: 2px;
-    padding: 3px 10px;
-    margin-bottom: 24px;
-  }
-
-  .v-title {
-    font-family: var(--serif);
-    font-size: clamp(1.1rem, 2vw, 1.45rem);
-    font-weight: 400;
-    color: var(--text);
-    margin-bottom: 8px;
-    line-height: 1.2;
-  }
-  .v-subtitle {
-    font-size: 0.7rem; font-weight: 600;
-    letter-spacing: 0.12em; text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 20px;
-  }
-  .v-body { font-size: 0.9rem; font-weight: 300; line-height: 1.85; color: var(--muted); max-width: 500px; }
-
-  .v-stack {
-    display: flex; gap: 6px; flex-wrap: wrap; margin-top: 28px;
-  }
-  .v-chip {
-    font-size: 0.62rem; font-weight: 500;
-    letter-spacing: 0.08em; text-transform: uppercase;
-    color: var(--muted);
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    padding: 3px 8px;
-    transition: border-color 0.2s, color 0.2s;
-  }
-  .v-card:hover .v-chip { border-color: rgba(20,184,166,0.2); color: rgba(20,184,166,0.7); }
-
-  .v-arrow {
-    position: absolute; top: 40px; right: 40px;
-    width: 32px; height: 32px;
-    border: 1px solid var(--border);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    color: var(--muted);
-    transition: border-color 0.2s, color 0.2s, transform 0.2s;
-  }
-  .v-card:hover .v-arrow { border-color: var(--accent-l); color: var(--accent-l); transform: rotate(45deg); }
-
-  /* ── RESEARCH ──────────────────────────────────────────────── */
-  #research { background: var(--surface); }
-  .research-inner {
-    display: grid;
-    grid-template-columns: 1fr 380px;
-    gap: 80px;
-    align-items: start;
-  }
-  .research-text { }
-  .research-text .section-title { margin-bottom: 24px; }
-  .research-text p {
-    font-size: 0.95rem; font-weight: 300;
-    line-height: 1.9; color: var(--muted);
-    margin-bottom: 16px;
-  }
-  .research-text p strong { color: rgba(241,245,249,0.75); font-weight: 400; }
-
-  .research-right { }
-
-  .uabc-badge {
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 28px;
-    margin-bottom: 20px;
-    background: rgba(255,255,255,0.015);
-    position: relative; overflow: hidden;
-  }
-  .uabc-badge::before {
-    content: '';
-    position: absolute; top: 0; left: 0; right: 0; height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(20,184,166,0.4), transparent);
-  }
-  .uabc-badge-label {
-    font-size: 0.62rem; font-weight: 600;
-    letter-spacing: 0.15em; text-transform: uppercase;
-    color: var(--accent-l); margin-bottom: 10px;
-  }
-  .uabc-badge-title {
-    font-size: 0.88rem; font-weight: 400;
-    color: var(--text); line-height: 1.5; margin-bottom: 6px;
-  }
-  .uabc-badge-sub {
-    font-size: 0.78rem; color: var(--muted); font-weight: 300;
-  }
-
-  .whitepaper-card {
-    border: 1px solid rgba(20,184,166,0.2);
-    border-radius: 6px;
-    padding: 28px;
-    background: linear-gradient(135deg, rgba(15,118,110,0.06) 0%, rgba(10,15,30,0.4) 100%);
-    position: relative; overflow: hidden;
-    cursor: none;
-    transition: border-color 0.3s, box-shadow 0.3s;
-  }
-  .whitepaper-card:hover {
-    border-color: rgba(20,184,166,0.4);
-    box-shadow: 0 0 40px rgba(15,118,110,0.12);
-  }
-  .whitepaper-card::before {
-    content: '';
-    position: absolute; top: 0; left: 0; right: 0; height: 1px;
-    background: linear-gradient(90deg, var(--accent-d), var(--accent-l), var(--accent-d));
-  }
-  .wp-icon {
-    width: 40px; height: 40px; border-radius: 4px;
-    background: rgba(20,184,166,0.1);
-    border: 1px solid rgba(20,184,166,0.2);
-    display: flex; align-items: center; justify-content: center;
-    color: var(--accent-l); margin-bottom: 16px;
-  }
-  .wp-label {
-    font-size: 0.62rem; font-weight: 600;
-    letter-spacing: 0.14em; text-transform: uppercase;
-    color: var(--accent-l); margin-bottom: 8px;
-  }
-  .wp-title {
-    font-family: var(--serif); font-size: 1rem;
-    color: var(--text); margin-bottom: 6px; line-height: 1.3;
-  }
-  .wp-sub {
-    font-size: 0.78rem; color: var(--muted); font-weight: 300; margin-bottom: 20px;
-  }
-  .wp-btn {
-    display: inline-flex; align-items: center; gap: 8px;
-    font-size: 0.72rem; font-weight: 500;
-    letter-spacing: 0.1em; text-transform: uppercase;
-    color: var(--accent-l);
-    border: 1px solid rgba(20,184,166,0.25);
-    border-radius: 3px; padding: 8px 16px;
-    text-decoration: none;
-    transition: background 0.2s, border-color 0.2s;
-    cursor: none;
-  }
-  .wp-btn:hover {
-    background: rgba(20,184,166,0.08);
-    border-color: rgba(20,184,166,0.5);
-  }
-  .wp-status {
-    display: inline-flex; align-items: center; gap: 6px;
-    font-size: 0.62rem; font-weight: 500;
-    letter-spacing: 0.1em; text-transform: uppercase;
-    color: var(--muted); margin-bottom: 16px;
-  }
-  .wp-status-dot { width: 5px; height: 5px; border-radius: 50%; background: #f59e0b; box-shadow: 0 0 6px #f59e0b; }
-
-  /* ── ABOUT & CONTACT ───────────────────────────────────────── */
-  #contact { background: var(--bg); }
-  .contact-inner {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
-    align-items: start;
-  }
-  .contact-left .section-title { margin-bottom: 20px; }
-  .contact-statement {
-    font-size: 0.95rem; font-weight: 300;
-    line-height: 1.9; color: var(--muted);
-    margin-bottom: 32px;
-    padding-left: 20px;
-    border-left: 1px solid rgba(20,184,166,0.3);
-  }
-  .contact-statement strong { color: rgba(241,245,249,0.75); font-weight: 400; }
-
-  .contact-right { }
-
-  .contact-form-card {
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 36px;
-    background: var(--card);
-    position: relative; overflow: hidden;
-  }
-  .contact-form-card::before {
-    content: '';
-    position: absolute; top: 0; left: 0; right: 0; height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(20,184,166,0.4), transparent);
-  }
-  .form-title {
-    font-size: 0.7rem; font-weight: 600;
-    letter-spacing: 0.15em; text-transform: uppercase;
-    color: var(--accent-l); margin-bottom: 24px;
-  }
-
-  .form-group { margin-bottom: 16px; }
-  .form-group label {
-    display: block; font-size: 0.7rem; font-weight: 500;
-    letter-spacing: 0.08em; text-transform: uppercase;
-    color: var(--muted); margin-bottom: 6px;
-  }
-  .form-group input,
-  .form-group select,
-  .form-group textarea {
-    width: 100%;
-    background: rgba(255,255,255,0.02);
-    border: 1px solid var(--border);
-    border-radius: 3px;
-    color: var(--text);
-    font-family: var(--sans); font-size: 0.88rem; font-weight: 300;
-    padding: 10px 14px;
-    outline: none;
-    transition: border-color 0.2s, background 0.2s;
-    -webkit-appearance: none;
-    resize: none;
-    cursor: none;
-  }
-  .form-group input::placeholder,
-  .form-group textarea::placeholder { color: rgba(100,116,139,0.5); }
-  .form-group input:focus,
-  .form-group select:focus,
-  .form-group textarea:focus {
-    border-color: rgba(20,184,166,0.4);
-    background: rgba(20,184,166,0.025);
-  }
-  .form-group select { color: var(--muted); }
-  .form-group select option { background: var(--card); }
-
-  .form-submit {
-    width: 100%;
-    background: var(--accent);
-    color: #fff;
-    border: none;
-    border-radius: 3px;
-    padding: 12px;
-    font-family: var(--sans);
-    font-size: 0.78rem; font-weight: 600;
-    letter-spacing: 0.1em; text-transform: uppercase;
-    cursor: none;
-    margin-top: 8px;
-    transition: background 0.2s, box-shadow 0.2s;
-  }
-  .form-submit:hover {
-    background: #0d6b63;
-    box-shadow: 0 0 24px rgba(15,118,110,0.35);
-  }
-
-  .contact-alt {
-    display: flex; align-items: center; gap: 12px;
-    margin-top: 20px;
-    padding: 14px 18px;
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    text-decoration: none;
-    color: var(--muted); font-size: 0.82rem;
-    transition: border-color 0.2s, color 0.2s;
-  }
-  .contact-alt:hover { border-color: rgba(20,184,166,0.3); color: var(--accent-l); }
-  .contact-alt span { flex: 1; }
-
-  /* ── FOOTER ────────────────────────────────────────────────── */
-  footer {
-    border-top: 1px solid var(--border);
-    padding: 32px 48px;
-    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;
-  }
-  .footer-left { font-size: 0.75rem; color: var(--muted); }
-  .footer-left strong { color: rgba(241,245,249,0.5); font-weight: 400; }
-  .footer-right {
-    display: flex; gap: 24px;
-  }
-  .footer-right a {
-    font-size: 0.68rem; font-weight: 500;
-    letter-spacing: 0.1em; text-transform: uppercase;
-    color: var(--muted); text-decoration: none;
-    transition: color 0.2s;
-  }
-  .footer-right a:hover { color: var(--accent-l); }
-
-  /* ── SCROLL REVEAL ─────────────────────────────────────────── */
-  .reveal {
-    opacity: 0; transform: translateY(32px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
-  }
-  .reveal.visible { opacity: 1; transform: translateY(0); }
-  .reveal-delay-1 { transition-delay: 0.1s; }
-  .reveal-delay-2 { transition-delay: 0.2s; }
-  .reveal-delay-3 { transition-delay: 0.3s; }
-  .reveal-delay-4 { transition-delay: 0.4s; }
-
-  /* ── LINE SEPARATOR ────────────────────────────────────────── */
-  .line-sep {
-    width: 100%; height: 1px;
-    background: linear-gradient(90deg, transparent, var(--border), transparent);
-    margin: 0;
-  }
-
-  /* ── RESPONSIVE ────────────────────────────────────────────── */
-  @media (max-width: 1024px) {
-    .research-inner { grid-template-columns: 1fr; gap: 48px; }
-    .research-right { max-width: 480px; }
-    .contact-inner { grid-template-columns: 1fr; gap: 48px; }
-    .hero-metrics { display: none; }
-  }
-  @media (max-width: 768px) {
-    nav { padding: 0 24px; }
-    .nav-links { display: none; }
-    .nav-cta { display: none; }
-    .nav-mobile-btn { display: block; color: var(--muted); }
-
-    section { padding: 80px 24px; }
-    .divider { margin: 0 24px; }
-    footer { padding: 24px; }
-
-    #hero { padding: 100px 24px 80px; }
-    .hero-title { font-size: 2.1rem; }
-
-    .framework-grid { grid-template-columns: 1fr; }
-    .ventures-grid { grid-template-columns: 1fr; }
-    .v-card:nth-child(3) { grid-column: span 1; }
-
-    .contact-form-card { padding: 24px; }
-  }
-  @media (max-width: 480px) {
-    .hero-title { font-size: 1.85rem; }
-    .hero-actions { flex-direction: column; }
-    .btn-primary, .btn-ghost { text-align: center; justify-content: center; }
-    body { cursor: auto; }
-    #cursor-dot, #cursor-ring { display: none; }
-  }
-
-  /* ── MOBILE NAV MENU ───────────────────────────────────────── */
-  #mobile-nav {
-    display: none;
-    position: fixed; inset: 0; z-index: 490;
-    background: rgba(10,15,30,0.97);
-    backdrop-filter: blur(20px);
-    flex-direction: column;
-    align-items: center; justify-content: center; gap: 32px;
-  }
-  #mobile-nav.open { display: flex; }
-  #mobile-nav a {
-    font-size: 1.5rem; font-family: var(--serif);
-    color: var(--text); text-decoration: none;
-    opacity: 0;
-    animation: fadeUp 0.4s forwards;
-  }
-  #mobile-nav a:nth-child(1) { animation-delay: 0.05s; }
-  #mobile-nav a:nth-child(2) { animation-delay: 0.1s; }
-  #mobile-nav a:nth-child(3) { animation-delay: 0.15s; }
-  #mobile-nav a:nth-child(4) { animation-delay: 0.2s; }
-  #mobile-nav a:hover { color: var(--accent-l); }
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+.wrap{padding:1rem 0;max-width:680px}
+.header{margin-bottom:1.5rem}
+.header h1{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:6px}
+.header p{font-size:14px;color:var(--color-text-secondary);line-height:1.5}
+.legend{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:1.5rem}
+.badge{font-size:11px;font-weight:500;padding:4px 10px;border-radius:20px}
+.b-toefl{background:#EEEDFE;color:#3C3489}
+.b-ml{background:#E1F5EE;color:#085041}
+.b-review{background:#FAEEDA;color:#633806}
+.nav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.5rem}
+.week-btn{font-size:12px;padding:5px 10px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);cursor:pointer;background:var(--color-background-primary);color:var(--color-text-secondary);transition:all .15s}
+.week-btn.active{background:var(--color-background-secondary);color:var(--color-text-primary);border-color:var(--color-border-primary);font-weight:500}
+.week-header{font-size:13px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;padding-bottom:6px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.day-card{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px 16px;margin-bottom:10px;background:var(--color-background-primary);cursor:pointer;transition:border-color .15s}
+.day-card:hover{border-color:var(--color-border-secondary)}
+.day-card.expanded{border-color:var(--color-border-primary)}
+.day-top{display:flex;align-items:center;gap:10px}
+.day-num{font-size:12px;font-weight:500;color:var(--color-text-tertiary);min-width:42px}
+.day-title{font-size:14px;font-weight:500;color:var(--color-text-primary);flex:1}
+.day-body{display:none;margin-top:12px;border-top:0.5px solid var(--color-border-tertiary);padding-top:12px}
+.day-card.expanded .day-body{display:block}
+.field{margin-bottom:10px}
+.field-label{font-size:11px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.field-val{font-size:13px;color:var(--color-text-primary);line-height:1.6}
+.dual{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.dual-box{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 12px}
+.dual-box .field-label{margin-bottom:3px}
+.search-tag{display:inline-block;font-size:11px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:20px;padding:3px 8px;color:var(--color-text-secondary);margin:2px 2px 2px 0;font-family:var(--font-mono)}
+.progress{margin-bottom:1.5rem}
+.prog-bar{height:6px;background:var(--color-background-secondary);border-radius:10px;overflow:hidden}
+.prog-fill{height:100%;background:#534AB7;border-radius:10px;transition:width .3s}
+.prog-label{font-size:12px;color:var(--color-text-secondary);margin-top:4px}
 </style>
-</head>
-
-<body>
-
-<!-- CURSOR -->
-<div id="cursor-dot"></div>
-<div id="cursor-ring"></div>
-
-<!-- MOBILE NAV -->
-<div id="mobile-nav">
-  <a href="#framework" onclick="closeMobileNav()">Framework</a>
-  <a href="#ventures" onclick="closeMobileNav()">Ventures</a>
-  <a href="#research" onclick="closeMobileNav()">Research</a>
-  <a href="#contact" onclick="closeMobileNav()">Contact</a>
+<div class="wrap">
+<h2 class="sr-only">Programa intensivo TOEFL ITP + ML Engineering — 45 días</h2>
+<div class="header">
+<h1>Programa intensivo C1 · 45 días · 1h diaria</h1>
+<p>TOEFL ITP (60%) + ML Engineering Interview Prep (40%) · Haz clic en cualquier día para ver el detalle completo.</p>
 </div>
-
-<!-- NAV -->
-<nav>
-  <a class="nav-logo" href="#">Growth<span>.</span>Engineer</a>
-  <ul class="nav-links">
-    <li><a href="#framework">Framework</a></li>
-    <li><a href="#ventures">Ventures</a></li>
-    <li><a href="#research">Research</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-  <a class="nav-cta" href="#contact">Inquire</a>
-  <button class="nav-mobile-btn" id="mobile-btn" onclick="toggleMobileNav()" aria-label="Menu">
-    <svg id="menu-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
-      <line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/>
-    </svg>
-  </button>
-</nav>
-
-<!-- HERO -->
-<section id="hero">
-  <div class="grid-lines"></div>
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-
-  <div class="hero-inner">
-    <div class="hero-badge">
-      <span class="badge-dot"></span>
-      <span class="badge-text">Available for select partnerships</span>
-    </div>
-
-    <h1 class="hero-title">
-      Engineering Growth<br>
-      Through <em>Data Science</em><br>
-      &amp; Marketing
-    </h1>
-
-    <p class="hero-sub">
-      I build <strong>private, high-ticket customer acquisition architectures</strong>, custom software infrastructure, and predictive financial models for select business ventures.
-    </p>
-
-    <div class="hero-actions">
-      <a href="#ventures" class="btn-primary">
-        Review Active Ventures
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
-      </a>
-      <a href="#contact" class="btn-ghost">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        Private Inquiry
-      </a>
-    </div>
-  </div>
-
-  <div class="hero-metrics">
-    <div class="metric-item">
-      <span class="metric-num">3</span>
-      <span class="metric-label">Active Private Verticals</span>
-    </div>
-    <div class="metric-item">
-      <span class="metric-num">ML</span>
-      <span class="metric-label">Research-Grade Models</span>
-    </div>
-    <div class="metric-item">
-      <span class="metric-num">B2B</span>
-      <span class="metric-label">High-Ticket Focus</span>
-    </div>
-  </div>
-
-  <div class="scroll-hint">
-    <span>Scroll</span>
-    <div class="scroll-line"></div>
-  </div>
-</section>
-
-<div class="line-sep"></div>
-
-<!-- FRAMEWORK -->
-<section id="framework">
-  <div class="framework-header reveal">
-    <div>
-      <span class="section-label">Methodology</span>
-      <h2 class="section-title">My Core <em>Scientific</em> Framework</h2>
-    </div>
-    <p class="section-intro">No intuition-based decisions. Every dollar deployed follows a three-stage validation architecture.</p>
-  </div>
-
-  <div class="framework-grid reveal reveal-delay-1">
-    <div class="fw-card">
-      <span class="fw-num">01</span>
-      <h3 class="fw-title">Data Validation</h3>
-      <p class="fw-body">Extracting, cleaning, and testing real market data before deploying a single dollar in ad spend. Hypotheses are killed before they become expensive mistakes.</p>
-      <div class="fw-icon">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-      </div>
-    </div>
-
-    <div class="fw-card">
-      <span class="fw-num">02</span>
-      <h3 class="fw-title">Context Architecture</h3>
-      <p class="fw-body">Building localized, high-converting customer journeys designed specifically for the target demographic — not generic templates, but precision-engineered funnels.</p>
-      <div class="fw-icon">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
-      </div>
-    </div>
-
-    <div class="fw-card">
-      <span class="fw-num">03</span>
-      <h3 class="fw-title">System Scalability</h3>
-      <p class="fw-body">Turning validated funnels into automated, scalable corporate assets that require minimal manual operations — systems that compound over time.</p>
-      <div class="fw-icon">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="line-sep"></div>
-
-<!-- VENTURES -->
-<section id="ventures">
-  <div class="ventures-header reveal">
-    <span class="section-label">Portfolio</span>
-    <h2 class="section-title">Active Ventures<br>&amp; <em>Solutions</em></h2>
-  </div>
-
-  <div class="ventures-grid">
-    <!-- Project A -->
-    <div class="v-card reveal reveal-delay-1">
-      <div class="v-arrow">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
-      </div>
-      <span class="v-tag">Medical Tourism</span>
-      <h3 class="v-title">TMS Solutions</h3>
-      <p class="v-subtitle">Medical Tourism Portal</p>
-      <p class="v-body">Software architecture and regional data-targeting funnel engineered to route international patients from Southern California into premium medical hubs in Baja California. End-to-end patient acquisition infrastructure.</p>
-      <div class="v-stack">
-        <span class="v-chip">Geo-Targeting</span>
-        <span class="v-chip">Patient Funnels</span>
-        <span class="v-chip">SoCal → Baja</span>
-        <span class="v-chip">CRO</span>
-      </div>
-    </div>
-
-    <!-- Project B -->
-    <div class="v-card reveal reveal-delay-2">
-      <div class="v-arrow">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
-      </div>
-      <span class="v-tag">E-Commerce</span>
-      <h3 class="v-title">E-Commerce Automation</h3>
-      <p class="v-subtitle">Logistical Scaling Infrastructure</p>
-      <p class="v-body">Development of internal predictive inventory systems and conversion rate optimization for automotive parts and high-demand consumer goods networks. Reducing fulfillment risk through ML-driven demand forecasting.</p>
-      <div class="v-stack">
-        <span class="v-chip">Predictive Inventory</span>
-        <span class="v-chip">CRO</span>
-        <span class="v-chip">Automotive</span>
-        <span class="v-chip">Demand Forecasting</span>
-      </div>
-    </div>
-
-    <!-- Project C — Full width -->
-    <div class="v-card reveal reveal-delay-3">
-      <div class="v-arrow">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
-      </div>
-      <span class="v-tag">Financial Modeling</span>
-      <h3 class="v-title">Predictive Financial Modeling</h3>
-      <p class="v-subtitle">MiPymes Lab — Applied Research</p>
-      <p class="v-body" style="max-width:680px">Research and deployment of machine learning algorithms — Random Forest &amp; Ridge Regression — to estimate and optimize the financial health and profitability metrics of small and medium enterprises. Translating academic research into actionable business intelligence for founders and institutional investors.</p>
-      <div class="v-stack">
-        <span class="v-chip">Random Forest</span>
-        <span class="v-chip">Ridge Regression</span>
-        <span class="v-chip">SME Profitability</span>
-        <span class="v-chip">Python / Scikit-learn</span>
-        <span class="v-chip">Financial Health Index</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="line-sep"></div>
-
-<!-- RESEARCH -->
-<section id="research">
-  <div class="research-inner">
-    <div class="research-text reveal">
-      <span class="section-label">Academic Research</span>
-      <h2 class="section-title">Applied AI &amp;<br><em>Scientific Research</em></h2>
-      <p>Behind every marketing strategy, there is scientific validation. No assumption goes untested, no model goes unvalidated.</p>
-      <p>Currently developing <strong>advanced predictive models</strong> within the Artificial Intelligence Lab at the Faculty of Graduate Studies and Research in Science and Engineering <strong>(MyDCI — UABC)</strong>, specializing in process engineering and neural networks applied to real business environments.</p>
-      <p>This academic pillar guarantees that every growth architecture is backed by peer-reviewed methodology — not intuition, not trends.</p>
-    </div>
-
-    <div class="research-right reveal reveal-delay-2">
-      <div class="uabc-badge">
-        <p class="uabc-badge-label">Active Research Affiliation</p>
-        <p class="uabc-badge-title">AI Lab — Faculty of Graduate Studies &amp; Research in Science and Engineering</p>
-        <p class="uabc-badge-sub">MyDCI · Universidad Autónoma de Baja California · Ensenada, MX</p>
-      </div>
-
-      <div class="whitepaper-card">
-        <div class="wp-icon">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-        </div>
-        <p class="wp-label">Confidential Executive Document</p>
-        <h3 class="wp-title">Stealth-Mode Executive Whitepaper</h3>
-        <p class="wp-sub">Predictive Profitability for Small &amp; Medium Businesses — ML Methodology &amp; Implementation Framework</p>
-        <p class="wp-status"><span class="wp-status-dot"></span> Access Upon Verified Request</p>
-        <a href="#contact" class="wp-btn">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Request Access
-        </a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="line-sep"></div>
-
-<!-- CONTACT -->
-<section id="contact">
-  <div class="contact-inner">
-    <div class="contact-left reveal">
-      <span class="section-label">Private Access</span>
-      <h2 class="section-title">Select<br><em>Collaborations</em><br>Only</h2>
-      <p class="contact-statement" style="margin-top:24px">
-        I do not run public marketing campaigns for myself because my focus is <strong>entirely dedicated to the growth pipelines of my private joint ventures</strong>. I only collaborate with <strong>select founders, certified medical specialists, and institutional investors</strong>.
-      </p>
-      <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px">
-        <div style="display:flex;align-items:center;gap:10px;font-size:0.8rem;color:var(--muted)">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-l)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          Vetted founders &amp; business operators
-        </div>
-        <div style="display:flex;align-items:center;gap:10px;font-size:0.8rem;color:var(--muted)">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-l)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          Certified medical specialists seeking patient growth
-        </div>
-        <div style="display:flex;align-items:center;gap:10px;font-size:0.8rem;color:var(--muted)">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-l)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          Institutional investors requiring data-backed models
-        </div>
-      </div>
-    </div>
-
-    <div class="contact-right reveal reveal-delay-2">
-      <div class="contact-form-card">
-        <p class="form-title">Private Inquiry Form</p>
-
-        <div class="form-group">
-          <label>Full Name</label>
-          <input type="text" placeholder="Dr. John Smith" />
-        </div>
-        <div class="form-group">
-          <label>Email Address</label>
-          <input type="email" placeholder="contact@company.com" />
-        </div>
-        <div class="form-group">
-          <label>Organization / Practice</label>
-          <input type="text" placeholder="Medical Group / Fund / Company" />
-        </div>
-        <div class="form-group">
-          <label>Inquiry Category</label>
-          <select>
-            <option value="" disabled selected>Select your context</option>
-            <option>Medical Tourism — Patient Acquisition</option>
-            <option>E-Commerce — Automation & Scaling</option>
-            <option>Financial Modeling — SME / MiPymes</option>
-            <option>Institutional Investment Partnership</option>
-            <option>Executive Whitepaper Access</option>
-            <option>Other</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Brief Context</label>
-          <textarea rows="3" placeholder="Describe your current situation and what you are looking to achieve..."></textarea>
-        </div>
-        <button type="button" class="form-submit" onclick="handleSubmit(this)">
-          Submit Private Inquiry
-        </button>
-      </div>
-
-      <a href="mailto:contact@growthengineer.io" class="contact-alt">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-        <span>Prefer direct email contact</span>
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <p class="footer-left">
-    &copy; 2025 <strong>Growth.Engineer</strong> — Private Ventures Portfolio · All engagements are by invitation or verified inquiry only.
-  </p>
-  <div class="footer-right">
-    <a href="#hero">Top</a>
-    <a href="#ventures">Ventures</a>
-    <a href="#research">Research</a>
-    <a href="#contact">Contact</a>
-  </div>
-</footer>
-
+<div class="legend">
+<span class="badge b-toefl">TOEFL ITP</span>
+<span class="badge b-ml">ML Engineering</span>
+<span class="badge b-review">Review / Mock</span>
+</div>
+<div class="nav" id="nav"></div>
+<div class="progress">
+<div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+<div class="prog-label" id="prog-label">Selecciona una semana para comenzar</div>
+</div>
+<div id="days-container"></div>
+</div>
 <script>
-  /* ── CURSOR ── */
-  const dot  = document.getElementById('cursor-dot');
-  const ring = document.getElementById('cursor-ring');
-  let mx = 0, my = 0, rx = 0, ry = 0;
+const weeks=[
+{title:"Semana 1 — Días 1–7: Fundamentos de alto rendimiento",days:[
+{n:1,type:"toefl",title:"TOEFL Structure: Parallel Structures & Subject-Verb Agreement Traps",focus:"TOEFL ITP — Structure & Written Expression",teoria:`PARALLEL STRUCTURE RULE: All elements in a series must share the same grammatical form.\n• Correct: "The model was trained, evaluated, AND deployed."\n• Trap: "The model was trained, in evaluation, AND deploying." → ERROR\n\nSVA INVERSION TRAPS:\n• "Neither X nor Y [verb agrees with Y]"\n• "There + BE + [subject]" → verb follows subject, not 'there'\n• Prepositional phrase between S and V hides the real subject\n\nKEY PATTERN: "Each of the / One of the / Every + [plural noun] + [singular verb]"`,search:`"TOEFL ITP Structure Section traps parallel structure" | "TOEFL written expression parallel form tricks"`,toefl:"Las preguntas de Written Expression testean estas trampas en >30% de los ítems. Dominarlas en 3-4 segundos cada una es la diferencia entre banda 50 y 60.",ml:"En una entrevista cuando describes un pipeline: 'The system ingests, preprocesses, and trains' — la paralelismo correcto proyecta articulación técnica precisa."},
+{n:2,type:"toefl",title:"TOEFL Reading: Inference & Author's Purpose in Scientific Passages",focus:"TOEFL ITP — Reading Comprehension",teoria:`INFERENCE QUESTION STEMS (reconócelos al instante):\n• "It can be inferred that..."\n• "The author implies that..."\n• "Which of the following is most likely true?"\n\nESTRATEGIA 3-STEP:\n1. Localiza el párrafo de evidencia (keyword scan)\n2. Parafrasea la idea central del párrafo\n3. Elimina: demasiado extremo (always/never), fuera de scope, factualmente inverso\n\nDISTRACTOR TIPOS:\n• True but not stated in passage\n• Partially correct (right word, wrong context)\n• Opposite of what's stated`,search:`"TOEFL ITP reading inference questions academic passage strategy" | "TOEFL reading comprehension eliminate wrong answers"`,toefl:"El 40% de Reading son inference/implication questions. Reconocer los 4 tipos de distractor es más rápido que re-leer el pasaje.",ml:"Leer papers de ML con esta lógica (¿qué implican los resultados?) te prepara para discutir contribuciones de investigación en entrevistas con rigor."},
+{n:3,type:"ml",title:"The STAR Method for ML Behavioral Questions",focus:"ML Engineering — Interview Prep / Behavioral",teoria:`STAR FRAMEWORK para ML:\nS — Situation: "We had a production model with 72h retraining cycles..."\nT — Task: "I needed to reduce latency without sacrificing >1% AUC."\nA — Action: [MOST IMPORTANT — be specific and technical]\n  → Name the algorithm/technique\n  → Quantify your decision criteria\n  → Mention what you tested vs. what you deployed\nR — Result: Quantify. Always. ("Reduced to 4h retraining, AUC delta < 0.3%")\n\nCOMMON ML BEHAVIORAL QUESTIONS:\n• "Tell me about a model that failed in production."\n• "Describe a time you disagreed with your team's technical choice."\n• "How did you handle a dataset with severe class imbalance?"`,search:`"STAR method ML engineer behavioral interview examples" | "machine learning behavioral questions technical answers"`,toefl:"Este framework también te entrena a estructurar ideas causalmente — exactamente la lógica que el Reading de TOEFL testea en pasajes de ciencia.",ml:"STAR es el formato estándar esperado en entrevistas de empresas tech internacionales. Memorizar 5 historias STAR sobre tus proyectos ML cubre el 80% de preguntas behavioral."},
+{n:4,type:"toefl",title:"TOEFL Listening: Lecture Comprehension & Note-Taking System",focus:"TOEFL ITP — Listening Comprehension",teoria:`SISTEMA DE NOTAS PARA LECTURES (adaptar al ITP):\nUsa símbolos consistentes:\n→ causa/efecto  | ≠ contraste  | * punto clave  | ? inferir  | ↑↓ tendencia\n\nESTRUCTURA TÍPICA DE LECTURE ITP:\n• Topic + Background (1er párrafo)\n• Main argument/finding\n• Supporting evidence x2\n• Counterargument OR limitation\n• Conclusion\n\nTRAMPAS DE AUDIO:\n• "Not" en pregunta = la respuesta es lo OPUESTO de lo que oíste\n• Paraphrasing: la respuesta correcta rara vez usa las palabras exactas del audio\n• Distractors en conversaciones: el estudiante menciona opción incorrecta primero`,search:`"TOEFL ITP Listening Section strategies academic lecture" | "TOEFL listening note taking system shortcuts"`,toefl:"El Listening ITP tiene 50 preguntas en 35 min. Tu sistema de símbolos debe ser automático para procesar a esa velocidad.",ml:"Escuchar presentaciones técnicas de ML (NeurIPS talks, MLOps podcasts) con este sistema entrena tu comprensión de vocabulario especializado en contexto real."},
+{n:5,type:"toefl",title:"TOEFL Structure: Relative Clauses & Reduced Relative Clauses",focus:"TOEFL ITP — Structure & Written Expression",teoria:`RELATIVE CLAUSE vs. REDUCED:\nFull: "The dataset [that was] labeled by experts performed best."\nReduced: "The dataset labeled by experts performed best." ← PREFERRED in academic writing\n\nTRAMPAS CLAVE:\n1. Missing relative pronoun: "The paper *__ was published in Nature* became a benchmark." → necesita 'that'\n2. Which vs. That: 'which' = non-restrictive (coma), 'that' = restrictive (sin coma)\n3. Dangling participial: "Having been trained on ImageNet, *the researchers* evaluated..." → ERROR (researchers ≠ trained)\n\nPRACTICE PATTERN:\n"A transformer model [that/which] uses self-attention [has/have] revolutionized NLP."`,search:`"TOEFL ITP relative clauses written expression traps" | "reduced relative clause academic English exercises"`,toefl:"Las relative clauses aparecen en al menos 5-7 ítems por examen en Structure. El dangling modifier es el error más frecuente en Written Expression.",ml:"En system design interviews, articular: 'The architecture, which relies on attention mechanisms, scales linearly' — el uso preciso de which/that demuestra escritura técnica C1."},
+{n:6,type:"ml",title:"Explaining Model Architectures Clearly — The 'Explain to a PM' Framework",focus:"ML Engineering — Technical Communication",teoria:`FRAMEWORK: Concept → Analogy → Technical Detail → Trade-off\n\nEJEMPLO — Transformers:\nConcept: "A Transformer processes all tokens in parallel using attention."\nAnalogy: "Unlike an RNN that reads word-by-word like a person, a Transformer reads the whole sentence at once, like a speed-reader seeing all words simultaneously."\nTechnical: "Self-attention computes Q·K^T/√d_k softmax scores to weight value vectors."\nTrade-off: "Quadratic complexity in sequence length — O(n²) — makes it expensive for very long sequences. Hence sparse attention variants like Longformer."\n\nPRACTICA CON:\n• CNNs vs. ViTs\n• LSTM vs. Transformer\n• XGBoost vs. Neural Net for tabular data`,search:`"explain transformer architecture interview ML engineer" | "machine learning system design explanation clarity"`,toefl:"Articular estructuras complejas con este patrón es idéntico a cómo las preguntas de Reading de TOEFL testean la comprensión de estructura de argumento científico.",ml:"Los entrevistadores evalúan si puedes comunicar claramente a stakeholders no técnicos. Este framework te posiciona como Senior, no solo como implementador."},
+{n:7,type:"review",title:"Mini-Mock + Vocabulary Consolidation Week 1",focus:"Review — TOEFL ITP + ML",teoria:`REVISIÓN SEMANA 1:\n\nVOCABULARIO ACADÉMICO CLAVE (memorizar definición + uso técnico):\n• empirical — based on data/observation: "empirical evaluation of the baseline"\n• robust — performing well across conditions: "a robust model generalizes"\n• magnitude — scale/size: "the magnitude of the error"\n• converge — reach a stable state: "the loss converges after epoch 40"\n• latent — hidden/underlying: "latent space representation"\n• sparse — mostly zero/empty: "sparse feature vectors"\n• canonical — standard/authoritative: "the canonical implementation"\n\nMINI-MOCK TASK:\n• 10 Structure items (tiempo: 8 min)\n• 1 Reading passage (tiempo: 10 min)\n• Escucha 1 lecture ITP real (YouTube) y toma notas con tu sistema`,search:`"TOEFL ITP practice test free Structure Reading" | "academic word list TOEFL technical vocabulary quiz"`,toefl:"La revisión activa de vocabulario en contexto técnico es lo que convierte palabras pasivas en respuestas instintivas en el examen.",ml:"Este vocabulario académico es exactamente lo que usas al leer y discutir papers de ML — 'empirical results show', 'robust to distribution shift', 'latent representations'."}
+]},
+{title:"Semana 2 — Días 8–14: Structure Avanzado + ML System Design",days:[
+{n:8,type:"toefl",title:"TOEFL Structure: Noun Clauses as Subjects & Objects",focus:"TOEFL ITP — Structure & Written Expression",teoria:`NOUN CLAUSES — PATRONES CLAVE:\n\nAs Subject: "[What the model predicts] determines the loss function."\nAs Object: "Researchers found [that attention weights are interpretable]."\nAs Complement: "The issue is [whether the data is balanced]."\n\nTRAMPAS:\n1. "That" vs. "What": \n   • "That" → introduces a complete statement (known fact)\n   • "What" → introduces unknown/question element\n   • ERROR: "What the study found *that* results improved." → debe ser 'was that'\n\n2. Embedded question order: MUST be declarative\n   • WRONG: "We don't know *what is the optimal learning rate.*"\n   • RIGHT: "We don't know *what the optimal learning rate is.*"`,search:`"TOEFL ITP noun clauses structure section examples" | "embedded questions word order TOEFL written expression"`,toefl:"Noun clauses son responsables de ~15% de errores en Structure. La inversión de orden en embedded questions es una trampa casi segura en cada examen.",ml:"'What the benchmark reveals is that our model underperforms on tail classes' — esta estructura eleva tu registro en entrevistas y en documentación técnica."},
+{n:9,type:"toefl",title:"TOEFL Reading: Vocabulary-in-Context & Reference Questions",focus:"TOEFL ITP — Reading Comprehension",teoria:`VOCABULARY-IN-CONTEXT STRATEGY:\n1. Cover the options — parafrasea la palabra tú mismo\n2. Substituye cada opción en la oración COMPLETA\n3. La respuesta debe mantener el significado, no solo ser sinónimo aislado\n\nREFERENCE QUESTIONS ("The word 'it/they/this' in line X refers to..."):\n• Regla: el pronombre refiere al ANTECEDENTE GRAMATICAL MÁS CERCANO compatible en número/género\n• Trampa frecuente: el antecedente lógico ≠ antecedente gramatical\n• Método: sustituye el pronombre por cada opción y verifica coherencia semántica Y gramatical\n\nACADEMIC WORD FAMILIES (aprender en familia):\nnote → notable / notably / notation\nassume → assumption / assumed / presuppose\nestablish → established / establishment / well-established`,search:`"TOEFL ITP reading vocabulary in context strategy" | "TOEFL pronoun reference questions technique"`,toefl:"Vocabulary-in-context + reference questions = ~35% del total de Reading. Son las preguntas más rápidas de responder si dominas el método.",ml:"Leer papers de ML con este enfoque (¿a qué refiere 'this approach'?) desarrolla comprensión profunda de argumentación técnica."},
+{n:10,type:"ml",title:"Data Pipeline Design: ETL, Feature Stores & Data Quality",focus:"ML Engineering — System Design",teoria:`FRAMEWORK PARA EXPLICAR UN ML PIPELINE EN ENTREVISTA:\n\n1. DATA INGESTION: "We ingest from [source] via [method] — batch/streaming"\n2. PREPROCESSING: "Normalization strategy: StandardScaler for continuous, target encoding for high-cardinality categoricals"\n3. FEATURE ENGINEERING: "We use a Feature Store (Feast/Tecton) to avoid training-serving skew"\n4. VALIDATION: "Great Expectations for schema validation; monitor KL divergence for distribution shift"\n5. STORAGE: "Parquet on S3 for training; Redis for low-latency serving features"\n\nKEY TRADE-OFF VOCABULARY:\n• "batch vs. real-time trade-off": latency vs. throughput\n• "training-serving skew": when offline features ≠ online features\n• "data leakage": future information contaminating training set`,search:`"ML data pipeline design interview system design" | "feature store training serving skew explanation"`,toefl:"Articular trade-offs con vocabulario técnico preciso también mejora tu lectura de pasajes científicos del TOEFL, que usan el mismo patrón de argumento/counterargument.",ml:"El diseño de pipelines es preguntado en el 80% de entrevistas Senior MLE. Dominar el vocabulario y el framework posiciona tu respuesta a nivel Staff."},
+{n:11,type:"toefl",title:"TOEFL Structure: Conditional Sentences & Hypothetical Structures",focus:"TOEFL ITP — Structure & Written Expression",teoria:`4 CONDITIONAL TYPES — ACADEMIC USAGE:\n\nType 0 (fact): "If data is skewed, the model overfits." [present + present]\nType 1 (real future): "If we regularize, performance will improve."\nType 2 (hypothetical): "If we had more data, the model would generalize better."\nType 3 (past counterfactual): "If we had used cross-validation, we would have detected overfitting."\n\nTRAMPAS ITP:\n1. "Would" NEVER goes in the if-clause\n   WRONG: "If the model *would converge*, results would improve."\n2. Inverted conditionals (formal/academic):\n   "Were the dataset larger, accuracy would increase." (= If the dataset were larger)\n   "Had we applied dropout, overfitting would have been reduced."\n\nEste último patrón aparece frecuentemente en pasajes académicos TOEFL.`,search:`"TOEFL ITP conditional sentences structure written expression" | "inverted conditionals academic English examples"`,toefl:"Las inversiones condicionales (Were/Had/Should) aparecen en al menos 2-3 ítems por examen y confunden a la mayoría de candidatos.",ml:"'Had we deployed the model earlier, we would have captured the Q4 trend' — los counterfactuals en entrevistas demuestran pensamiento analítico retrospectivo sofisticado."},
+{n:12,type:"toefl",title:"TOEFL Listening: Conversation Comprehension & Attitude Questions",focus:"TOEFL ITP — Listening Comprehension",teoria:`CONVERSATION STRUCTURE ITP:\n• Typical scenario: student-professor, student-administrator, two students\n• Focus: purpose of conversation, problem/solution, speaker's attitude\n\nATTITUDE QUESTION SIGNALS (en el audio):\n• Hesitation words: "well...", "actually...", "I'm not sure but..." → doubt/uncertainty\n• Tone rise at end → question/uncertainty\n• "That's interesting" (said flatly) → often sarcasm or polite skepticism\n• Repetition of key info → emphasis, important point\n\nANSWER TRAP: "The student thinks the assignment is _____"\n• Distractor: uses a positive word but the speaker's tone was negative\n• Strategy: focus on HOW something is said, not just WHAT`,search:`"TOEFL ITP listening conversations attitude inference" | "TOEFL listening section Part A short conversations tips"`,toefl:"Las preguntas de actitud e inferencia emocional del Listening son un 20% del total. Entrenar la lectura de tono paralelo al contenido las hace triviales.",ml:"En entrevistas, escuchar el tono del entrevistador (¿están satisfechos con tu respuesta?) para calibrar si elaborar o continuar es una habilidad de comunicación Senior."},
+{n:13,type:"ml",title:"Evaluation Metrics Deep Dive: Beyond Accuracy",focus:"ML Engineering — Technical Vocabulary / Interview Prep",teoria:`FRAMEWORK METRICS → USE CASE → TRADE-OFF:\n\nClassification:\n• Precision = TP/(TP+FP) → "When you say positive, how often are you right?"\n• Recall = TP/(TP+FN) → "Of all actual positives, how many did you catch?"\n• F1 = harmonic mean → balance when classes are imbalanced\n• AUC-ROC → rank ordering, threshold-independent\n• PR-AUC → preferred when positive class is rare (fraud, medical)\n\nRegression:\n• MAE → interpretable, robust to outliers\n• RMSE → penalizes large errors more (use when large errors are costly)\n• MAPE → percentage error (avoid when actuals can be 0)\n\nRanking/Recommendation:\n• NDCG → normalized discounted cumulative gain\n• MAP → mean average precision\n\nKEY INTERVIEW ANSWER: "The metric choice is driven by the business cost of each error type."`,search:`"ML evaluation metrics interview deep dive precision recall AUC" | "when to use NDCG vs MAP recommendation systems"`,toefl:"Entender la relación entre variables cuantitativas (precision vs recall) usa el mismo razonamiento lógico que las preguntas de causa/efecto en el Reading ITP.",ml:"Los entrevistadores valoran que menciones el costo de negocio asociado a cada tipo de error. Esto diferencia un MLE Senior de un Junior."},
+{n:14,type:"review",title:"Mini-Mock + Week 2 Structure Patterns Review",focus:"Review — TOEFL ITP Structure Focus",teoria:`CHECKLIST STRUCTURE WEEK 1-2 (repasar antes del mock):\n☐ Parallel structures (A, B, and C — same form)\n☐ Subject-verb agreement with intervening phrases\n☐ Each/one of the + plural noun + singular verb\n☐ Relative clauses: which vs. that + dangling modifiers\n☐ Noun clauses: that vs. what + embedded question order\n☐ Conditionals: would never in if-clause + inverted form\n\nMINI-MOCK WEEK 2:\n• 20 Structure items (tiempo: 15 min)\n• 1 Full Reading passage with all question types (tiempo: 12 min)\n• Corrección analítica: para cada error, identifica CUÁL trampa activaste`,search:`"TOEFL ITP free practice test structure written expression" | "TOEFL ITP full practice test PDF 2023 2024"`,toefl:"El análisis de errores es el 80% del progreso. No es cuántos mocks haces, sino cuán profundo analizas cada fallo.",ml:"El habit de post-mortem analítico (¿qué falló y por qué?) es también el mindset de un MLE Senior ante un modelo en producción."}
+]},
+{title:"Semana 3 — Días 15–21: Reading Avanzado + ML Algorithms",days:[
+{n:15,type:"toefl",title:"TOEFL Reading: Main Idea & Organization of Scientific Passages",focus:"TOEFL ITP — Reading Comprehension",teoria:`MAIN IDEA STRATEGY (30 segundos):\n1. Lee el primer párrafo COMPLETO\n2. Lee la primera oración de cada párrafo siguiente\n3. Lee el último párrafo completo\n→ Tienes el esqueleto del argumento sin leer el 60% del texto\n\nPASSAGE ORGANIZATION TYPES:\n• Problem-Solution: [challenge] → [proposed approach] → [results]\n• Comparison-Contrast: [method A] vs. [method B] → [conclusion]\n• Cause-Effect: [phenomenon] → [mechanism] → [consequence]\n• Chronological: [historical development of concept]\n\nQUESTION MAPPING:\n"The passage is primarily concerned with..." → Main Idea\n"According to the passage, X occurs because..." → Cause-Effect\n"The author's attitude toward X is best described as..." → Tone`,search:`"TOEFL ITP reading main idea passage structure strategy" | "academic reading comprehension skimming technique TOEFL"`,toefl:"Dominar el skim strategy reduce el tiempo de lectura en 40% sin afectar precisión — crítico en el ITP donde los pasajes son densos.",ml:"Los papers de ML siguen la estructura Problem-Solution-Results. Leerlos con este framework es un multiplicador de comprensión para el upskilling técnico continuo."},
+{n:16,type:"toefl",title:"TOEFL Structure: Gerunds vs. Infinitives & Verb Complementation",focus:"TOEFL ITP — Structure & Written Expression",teoria:`GERUND vs. INFINITIVE — REGLAS PARA EXAMEN:\n\nVerbs that take GERUND only:\n• avoid, consider, deny, finish, practice, suggest, recommend\n• "The team avoided *overfitting* by applying dropout."\n\nVerbs that take INFINITIVE only:\n• agree, decide, plan, refuse, seem, tend, hope, expect\n• "The model tends *to underperform* on out-of-distribution data."\n\nVerbs that take BOTH (meaning changes!):\n• stop + gerund = quit doing\n  "The training stopped converging." (training que antes convergía dejó de hacerlo)\n• stop + infinitive = pause to do\n  "Training stopped to resume with a lower LR." (paró PARA hacer algo)\n• remember/forget: gerund = past event; infinitive = future task\n\nTRAMPA FRECUENTE: after prepositions, ALWAYS gerund\n"Before *deploying*, we validate." ← correcto`,search:`"TOEFL gerund infinitive written expression traps" | "gerund vs infinitive meaning change stop remember"`,toefl:"Gerund/infinitive discrimination aparece en 3-5 ítems por examen. Los verbos de doble significado son trampas perfectas para candidatos avanzados.",ml:"'We recommend evaluating on a held-out set' vs. 'We plan to evaluate' — el uso preciso señala dominio del idioma ante un equipo nativo."},
+{n:17,type:"ml",title:"Algorithm Trade-offs: The Decision Framework for MLE Interviews",focus:"ML Engineering — Technical Vocabulary / Interview Prep",teoria:`DECISION MATRIX — CÓMO ELEGIR UN ALGORITMO:\n\nTabular data:\n• < 1M rows, mixed types → XGBoost / LightGBM (start here)\n• Need interpretability → Logistic Regression + SHAP\n• Very high cardinality features → Neural net with embeddings\n\nText:\n• Classification, few-shot → Fine-tuned BERT family\n• Generation, summarization → GPT family / T5\n• Zero-shot, reasoning → LLM with prompting\n\nImages:\n• Classification → ResNet / EfficientNet (baseline), ViT (SOTA)\n• Detection → YOLO family (speed), DETR (accuracy)\n• Segmentation → SAM, Mask R-CNN\n\nFRAMEWORK DE RESPUESTA:\n"Given [constraints: latency/compute/data size/interpretability], I would choose [algorithm] because [3 technical reasons], with the trade-off that [limitation]."\n\nSignal words: latency-constrained, data-scarce, interpretable, scalable`,search:`"machine learning algorithm selection interview guide 2024" | "XGBoost vs neural network tabular data trade-offs"`,toefl:"Este framework de comparación estructurada es el mismo que el TOEFL testea en pasajes de ciencia que comparan dos teorías o métodos.",ml:"Responder con un framework explícito (en lugar de 'depende') te marca como Senior. Los entrevistadores buscan que navegues trade-offs, no memorices respuestas."},
+{n:18,type:"toefl",title:"TOEFL Listening: Lecture on Scientific/Technical Topics",focus:"TOEFL ITP — Listening Comprehension",teoria:`SCIENTIFIC LECTURE STRUCTURE (ITP Part C):\nSegmento típico: 5-6 oraciones, pregunta de detalle + función + inferencia\n\nANÁLISIS DE SEÑALES DISCURSIVAS:\n• "In fact..." → reinforcement of previous point\n• "However..." → contrast/exception coming\n• "This suggests that..." → inference point — ANOTA\n• "For example..." → supporting detail (no es el punto principal)\n• "Interestingly..." → speaker is highlighting something unusual — importante\n• "As a result..." → effect/conclusion — ANOTA\n\nVELOCIDAD Y ACENTO:\nEl ITP usa acentos norteamericanos estándar a ~150 wpm\nPráctica con TED-Ed + Crash Course en YouTube a 1.25x → entrena velocidad`,search:`"TOEFL ITP Part C lecture listening academic science topics" | "Crash Course science lectures English listening practice"`,toefl:"La Part C del Listening (talks y lectures) es la más difícil del ITP. Reconocer marcadores discursivos elimina la necesidad de retener cada palabra.",ml:"Escuchar talks técnicas de ML (Andrej Karpathy, Yannic Kilcher) con esta atención activa construye vocabulario técnico de alto nivel."},
+{n:19,type:"toefl",title:"TOEFL Reading: Detail Questions & Factual Information",focus:"TOEFL ITP — Reading Comprehension",teoria:`DETAIL QUESTIONS — MÉTODO EXACTO:\n"According to the passage..." / "The author states that..."\n\n1. Identifica la keyword en la pregunta\n2. Escanea el pasaje para esa keyword o su sinónimo\n3. Lee SOLO las 2-3 oraciones alrededor\n4. Compara con opciones: la correcta parafrasea el texto, NO lo copia textual\n\nNEGATIVE FACTUAL: "Which is NOT mentioned / EXCEPT"\n• Lee las 4 opciones\n• Confirma en el pasaje 3 de las 4 (las incorrectas)\n• La que NO puedas confirmar = respuesta correcta\n• ¡No inviertas la lógica!\n\nTRAMPA: "True but not in the passage" — la opción es correcta en el mundo real pero el texto no la menciona. Esa es una respuesta INCORRECTA en el ITP.`,search:`"TOEFL ITP reading detail questions strategy NOT EXCEPT" | "TOEFL reading factual information negative questions"`,toefl:"Detail + Negative Factual questions = ~40% del Reading. Son las más mecánicas y deberían ser las más seguras con el método correcto.",ml:"Leer documentación técnica (papers, RFCs, API docs) con este nivel de atención a distinción entre 'lo que dice el texto' vs. 'lo que yo asumo' evita errores de implementación costosos."},
+{n:20,type:"ml",title:"MLOps & Production ML: Monitoring, Drift & Deployment Patterns",focus:"ML Engineering — System Design",teoria:`MLOps VOCABULARY ESENCIAL:\n\nDEPLOYMENT PATTERNS:\n• Blue-Green: two identical envs, instant switch → zero downtime\n• Canary: route 5% traffic to new model → monitor before full rollout\n• Shadow mode: new model runs in parallel, no impact → safe evaluation\n• A/B Testing: controlled experiment with statistical significance test\n\nMONITORING:\n• Data drift: input distribution shifts (PSI, KS test)\n• Concept drift: relationship X→Y changes (monitor prediction distribution)\n• Model degradation: metric decay over time (set alert thresholds)\n\nREFRESH STRATEGY:\n• Scheduled retraining (predictable data patterns)\n• Triggered retraining (drift detected above threshold)\n• Online learning (continuous update — careful with stability)\n\nKEY PHRASE: "Our monitoring strategy covers data quality, data drift, and model performance metrics with automated alerting and a defined retraining trigger."`,search:`"MLOps model monitoring drift detection interview" | "blue green canary deployment ML system design"`,toefl:"La narrativa de 'problema detectado → solución implementada → resultado medido' es el mismo arco argumentativo de los pasajes científicos del TOEFL.",ml:"MLOps es una habilidad diferenciadora para roles remotos — las empresas en WTTJ buscan MLE que puedan operar modelos end-to-end, no solo entrenarlos."},
+{n:21,type:"review",title:"Full Half-Mock TOEFL ITP + ML Interview Simulation",focus:"Review — TOEFL ITP Full Section + ML Behavioral",teoria:`HALF-MOCK STRUCTURE (60 min exactos):\n\n[0-15 min] Structure & Written Expression:\n• 40 ítems ITP → target: 33+ correctos\n• Marca los que dudaste para revisión post-sesión\n\n[15-35 min] Reading Comprehension:\n• 50 ítems / 5 pasajes → target: 40+ correctos\n\n[35-50 min] Listening (grabación YouTube ITP oficial):\n• Parte A (short conv) + Parte B (long conv)\n\n[50-60 min] ML Interview Simulation:\n• Responde EN VOZ ALTA usando STAR:\n  "Tell me about a production incident with one of your models."\n\nANÁLISIS POST-MOCK:\n• Clasifica errores: trampa de vocabulario / trampa gramatical / tiempo insuficiente\n• Identifica patrón dominante de error`,search:`"TOEFL ITP complete practice test with answers" | "TOEFL ITP official Longman preparation course free"`,toefl:"Simular condiciones reales de examen — incluyendo el orden de secciones — reduce la ansiedad y mide progreso real contra el día 1.",ml:"Hablar en voz alta tu respuesta STAR identifica dónde pierdes fluidez o precisión técnica — información que leer en silencio no te da."}
+]},
+{title:"Semana 4 — Días 22–28: Pattern Mastery + ML Communication",days:[
+{n:22,type:"toefl",title:"TOEFL Structure: Appositive Phrases & Parenthetical Insertions",focus:"TOEFL ITP — Structure & Written Expression",teoria:`APPOSITIVE PHRASES — identifica y reduce:\n\n"BERT, [a bidirectional encoder], outperforms earlier models."\n→ Remove brackets → "BERT outperforms earlier models." → Subject is BERT (singular)\n\nTRAMPA FRECUENTE:\n"The accuracy of the models, [as well as the precision], [needs/need] improvement."\n→ "As well as" ≠ AND → sujeto real = "accuracy" → singular → NEEDS\n\nOTROS FALSOS PLURALIZADORES:\n• together with / along with / in addition to / accompanied by\n• "The CEO, along with his team, [is/are] responsible." → IS\n\nPARENTHETICALS EN WRITTEN EXPRESSION:\n"The results, however, [was/were] inconclusive." → WERE (subject = results)\nEl parenthetical (however/therefore/moreover) NO cambia el sujeto.`,search:`"TOEFL ITP appositive phrase subject verb agreement trap" | "along with together with agreement TOEFL structure"`,toefl:"Este patrón de 'falso pluralizador' es una de las 5 trampas más frecuentes en Structure. Reconocerla visualmente en 2 segundos vale ~3 puntos.",ml:"'The pipeline, along with the feature store, requires careful versioning' — articular sujetos complejos con concordancia correcta marca precisión lingüística."},
+{n:23,type:"ml",title:"Communicating Uncertainty & Limitations in ML — The Senior Mindset",focus:"ML Engineering — Interview Prep / Technical Vocabulary",teoria:`COMMUNICATING UNCERTAINTY (diferencia Junior vs. Senior):\n\nJunior: "The model achieves 94% accuracy."\nSenior: "The model achieves 94% accuracy on the held-out test set, which is IID with training. We have not yet evaluated on out-of-distribution scenarios, where I'd expect degradation."\n\nFRAMEWORK: Result → Condition → Caveat → Next Step\n\nKEY PHRASES PARA ENTREVISTAS:\n• "That said, there's a caveat worth mentioning..."\n• "The trade-off here is..."\n• "This works well under the assumption that..."\n• "I'd want to validate this on..."\n• "A risk I'd flag is..."\n• "The limitation of this approach is X; we mitigated it by Y."\n\nCUANDO NO SABES LA RESPUESTA:\n"I haven't implemented that specific architecture, but based on my understanding of [related concept], I'd reason that..." → Shows intellectual honesty + reasoning ability`,search:`"senior ML engineer interview communication uncertainty limitations" | "how to answer machine learning interview questions you don't know"`,toefl:"Este patrón de claim + condition + caveat es idéntico a la estructura argumental de los pasajes científicos del TOEFL ITP.",ml:"Los entrevistadores en empresas top valoran la honestidad calibrada. Decir 'I don't know but here's how I'd think about it' > bluffing con un respuesta vaga."},
+{n:24,type:"toefl",title:"TOEFL Reading: Purpose of Paragraph & Rhetorical Function",focus:"TOEFL ITP — Reading Comprehension",teoria:`RHETORICAL FUNCTION QUESTIONS:\n"Why does the author mention X in paragraph 3?"\n"What is the function of the second paragraph?"\n\nFUNCTIONES RETÓRICAS COMUNES:\n• To provide an example of [claim in previous sentence]\n• To contrast with [the method/view described earlier]\n• To support the claim that [main argument]\n• To introduce a limitation of [the proposed approach]\n• To define a term used in [subsequent paragraphs]\n\nESTRATEGIA:\n1. Lee el párrafo ANTES del mencionado (contexto previo)\n2. Identifica la relación lógica: ¿agrega? ¿contrasta? ¿ilustra?\n3. Elige la opción que describe esa RELACIÓN, no el CONTENIDO\n\nTRAMPA: Opciones que describen correctamente qué DICE el párrafo pero no por qué está AHÍ`,search:`"TOEFL ITP reading rhetorical purpose paragraph function question" | "TOEFL reading comprehension why author mentions strategy"`,toefl:"Rhetorical function questions son las más difíciles del Reading ITP. Distinguir 'qué dice' de 'por qué está aquí' requiere comprensión de macroorganización.",ml:"Entender la función retórica de cada sección de un paper de ML (¿por qué los autores mencionan X en la introducción?) acelera la lectura crítica de literatura."},
+{n:25,type:"toefl",title:"TOEFL Structure: Passive Voice in Academic Writing",focus:"TOEFL ITP — Structure & Written Expression",teoria:`PASSIVE VOICE — ACADEMIC USAGE:\n\nFORMACIÓN: BE (conjugado) + past participle\n• "The model was trained on 100M tokens."\n• "Results have been validated by two independent teams."\n• "The hypothesis will be tested in subsequent experiments."\n\nTRAMPAS EN WRITTEN EXPRESSION:\n1. Missing BE: "The data *collected* from 50 participants." → necesita WAS/WERE\n2. Wrong participle: "The results were *showed*" → SHOWN\n3. Passive with stative verbs: "The paper was consisted of..." → ERROR (consist no tiene voz pasiva activa en inglés)\n   Verbos SIN pasiva: consist, contain, include, resemble, lack\n\nWHEN TO USE PASSIVE IN ACADEMIC WRITING:\n• Agent unknown or unimportant\n• To emphasize the object/result\n• To maintain objectivity (scientific reports)\n• "Experiments were conducted..." — no dice quién → objectivity`,search:`"TOEFL ITP passive voice written expression errors" | "passive voice academic writing stative verbs no passive"`,toefl:"El pasivo es la voz dominante en escritura académica — los pasajes de Reading están llenos de él, y Written Expression testa sus formas incorrectas directamente.",ml:"Escribir documentación técnica, papers internos y READMEs con pasivo correcto ('The model was fine-tuned', NOT 'The model was fine-tuning') marca calidad profesional."},
+{n:26,type:"ml",title:"Large Language Models in Production: RAG, Fine-tuning & Prompt Engineering",focus:"ML Engineering — Technical Vocabulary / Interview Prep",focus2:"ML Engineering — System Design",teoria:`LLM PRODUCTION DECISION TREE:\n\n[Prompt Engineering] → Try first. Zero cost, fast iteration.\n• Few-shot examples, chain-of-thought, system prompts\n• Limit: works for well-defined tasks with good base model\n\n[RAG (Retrieval-Augmented Generation)] → When:\n• Knowledge needs to be current or proprietary\n• Need source attribution\n• Architecture: Query → Embedding → Vector DB search → Context injection → LLM\n• Tools: LangChain, LlamaIndex, Chroma, Pinecone\n\n[Fine-tuning] → When:\n• Specific style/format required\n• Domain adaptation needed (medical, legal, code)\n• Methods: LoRA/QLoRA (parameter-efficient), full fine-tuning\n• Risk: catastrophic forgetting — use regularization\n\n[Pre-training] → Almost never for a single org. Use foundation models.\n\nKEY PHRASE: "I follow a cost-complexity curve: start with prompting, add RAG for knowledge grounding, fine-tune only if behavioral alignment is required."`,search:`"RAG vs fine-tuning LLM when to use interview 2024" | "LLM production system design RAG fine-tuning tradeoffs"`,toefl:"Articular una jerarquía de decisiones (primero X, luego Y si X no aplica) es el mismo patrón lógico que TOEFL testea en secuencias de causa-efecto en Reading.",ml:"LLMs son el tema más preguntado en entrevistas MLE 2024-2025. Este decision tree te da una respuesta estructurada y memorable."},
+{n:27,type:"toefl",title:"TOEFL Listening: Connecting Spoken & Written Academic English",focus:"TOEFL ITP — Listening Comprehension",teoria:`SPOKEN vs. WRITTEN REGISTER — EL PUENTE:\n\nSPOKEN (ITP audio): contraction-heavy, hedge words, false starts\n• "It's kind of like... what happens when, you know, the gradient explodes."\n\nWRITTEN (ITP reading): formal, nominalizations, passive\n• "Gradient explosion occurs when the partial derivatives in the update rule diverge."\n\nNOMINALIZATIONS (habla académica oral también las usa):\n• analyze → analysis | develop → development | apply → application\n• "The *application* of attention mechanisms..." (not "applying attention")\n\nHEDGE VOCABULARY (marcan grado de certeza — importante en attitude questions):\n• Strong claim: "demonstrates", "proves", "clearly indicates"\n• Hedged claim: "suggests", "may indicate", "appears to", "tends to"\n• Weak/speculative: "might", "could possibly", "it is conceivable that"\n\nSaber el nivel de hedge = responder attitude/function questions correctamente`,search:`"academic English spoken written register differences TOEFL" | "hedging language academic vocabulary TOEFL listening"`,toefl:"Las preguntas de actitud del Listening dependen de reconocer estos marcadores de certeza. En Written Expression, usar el hedge correcto evita errores de registro.",ml:"En entrevistas, calibrar tu hedge ('this approach tends to work well when...' vs. 'this always works') comunica madurez técnica y honestidad intelectual."},
+{n:28,type:"review",title:"Week 4 Review: Structure Mastery Checklist + ML Vocabulary Audit",focus:"Review — TOEFL ITP + ML Vocabulary Consolidation",teoria:`STRUCTURE MASTER CHECKLIST (semanas 1-4):\n☐ Parallel structures\n☐ SVA: Each/one of + inversion + appositive\n☐ Relative clauses: which/that + dangling modifier + reduction\n☐ Noun clauses: that/what + embedded question order\n☐ Conditionals: type 0-3 + inverted form\n☐ Gerund/infinitive: verb lists + meaning-change pairs\n☐ Passive: formation + stative verb exceptions\n☐ Appositive phrases + false pluralizers\n\nML VOCABULARY AUDIT — ¿Puedes definir y usar en oración?\n☐ training-serving skew | ☐ concept drift | ☐ data leakage\n☐ precision/recall trade-off | ☐ AUC-ROC vs. PR-AUC\n☐ LoRA / QLoRA | ☐ RAG architecture | ☐ canary deployment\n☐ feature store | ☐ counterfactual | ☐ regularization\n\nTASK: Para cada término que NO puedas usar fluidamente, escribe 2 oraciones de contexto en tu cuaderno.`,search:`"TOEFL ITP structure written expression complete rule list" | "ML engineer technical vocabulary flashcards Anki"`,toefl:"Una auditoría explícita de qué dominas y qué no es más valiosa que 2 horas de práctica sin foco. Identifica los 2-3 puntos débiles y duplica tiempo en ellos.",ml:"El vocabulario técnico preciso en inglés es un filtro en entrevistas remotas. Los entrevistadores nativos detectan inmediatamente cuando el candidato parafrasea porque no recuerda el término correcto."}
+]},
+{title:"Semana 5 — Días 29–35: Simulacros + Comunicación Avanzada",days:[
+{n:29,type:"toefl",title:"TOEFL Structure: Article Usage & Quantifier Traps",focus:"TOEFL ITP — Structure & Written Expression",teoria:`ARTICLES — REGLAS PARA EXAMEN:\n\nTHE (definite) — cuando ambas partes saben a cuál se refiere:\n• "The transformer architecture proposed in Section 2..."\n• Second mention: "A model was trained. The model achieved 94% F1."\n• Unique items: "the loss function", "the main contribution"\n\nA/AN (indefinite) — primera mención, no específico:\n• "We propose a novel framework..." (cualquier framework, uno nuevo)\n\nZERO ARTICLE — generalizaciones, plurales, uncountable:\n• "Machine learning has transformed [Ø] computer vision."\n• "Ø Data quality is critical for [Ø] training."\n\nTRAMPAS FRECUENTES:\n• "a unique" → AN unique? NO → /juː/ = consonant sound → A unique\n• "an ML model" → yes, M = /ɛm/ starts with vowel sound\n• Generic plural: "The transformers are powerful" (wrong if general) → "Transformers are powerful"`,search:`"TOEFL ITP article usage written expression the a an zero article" | "article errors advanced English academic writing quiz"`,toefl:"Los errores de artículo representan 3-5 ítems en Written Expression. Son fáciles de ganar con reglas claras y difíciles de adivinar sin ellas.",ml:"La escritura de documentación técnica, proposals y papers sin errores de artículo es esperada a nivel Senior. 'The model' vs. 'a model' cambia el significado."},
+{n:30,type:"ml",title:"System Design Interview: Designing an ML System End-to-End",focus:"ML Engineering — System Design",teoria:`FRAMEWORK: REQUIREMENTS → DATA → MODEL → SERVING → MONITORING\n\n1. REQUIREMENTS (2 min):\n   "Before I dive in, let me clarify: what's the scale? QPS? Latency budget? Offline or online?"\n\n2. DATA LAYER:\n   Sources, volume, labeling strategy, storage (data lake vs. warehouse)\n\n3. MODEL SELECTION:\n   Baseline first → iterate → justify complexity increase\n\n4. SERVING ARCHITECTURE:\n   Batch vs. real-time | REST API vs. gRPC | Edge vs. cloud\n   Latency target → determines model complexity\n\n5. MONITORING:\n   Input drift, prediction drift, business metric correlation\n\nEJEMPLO: "Design a recommendation system for a streaming platform."\n→ Two-stage: retrieval (ANN with embeddings) + ranking (LightGBM or small NN)\n→ Feature store for user history\n→ A/B test ranking models\n→ Monitor CTR, watch time, diversity metrics`,search:`"ML system design interview recommendation system end to end" | "machine learning system design interview framework 2024"`,toefl:"Estructurar una respuesta con un framework explícito (Requirements → Data → Model → ...) es la misma habilidad que organizar ideas en una respuesta de Writing del TOEFL.",ml:"El system design interview es el filtro más importante en roles MLE Senior en empresas internacionales. Este framework te da 30 minutos de estructura sólida."},
+{n:31,type:"toefl",title:"TOEFL Reading: Scientific Passage Speed Reading Strategy",focus:"TOEFL ITP — Reading Comprehension",teoria:`SPEED READING PARA PASAJES CIENTÍFICOS (target: 250 wpm):\n\nPASAJES CIENTÍFICOS ITP — TEMÁTICAS COMUNES:\n• Biología/ecología, geología, astronomía, física, psicología cognitiva\n• Ciencias sociales y antropología\n• Historia de la ciencia y descubrimientos\n\nTIME BUDGET (5 pasajes en 55 min = 11 min/pasaje):\n• Skim: 90 segundos (primer párrafo + primeras oraciones)\n• Preguntas 1-2 (main idea / organization): 2 min\n• Preguntas 3-8 (detail + inference): 7 min\n• Preguntas 9-10 (vocabulary + reference): 90 segundos\n\nWORD TRIAGE — Skip & mark strategy:\nSi encuentras una palabra desconocida en una pregunta de vocabulario:\n• Usa contexto SENTENCIAL (no de párrafo)\n• Si no puedes deducirla en 15 seg → elige la opción más "neutral"\n\nMUSTANG PASSAGES (más difíciles): pasajes con mucho vocabulario técnico especializado\n→ Técnica: ancla con las cifras y nombres propios, infiere el marco general`,search:`"TOEFL ITP reading speed strategy academic science passage" | "how to read TOEFL passages faster without losing accuracy"`,toefl:"El tiempo es el principal asesino de puntuación en el Reading ITP. El sistema de time budget convierte la sesión de 55 min en 5 subsesiones de 11 min manejables.",ml:"La lectura rápida de papers (abstract + intro + resultados + conclusión en 5 min) con comprensión profunda es una competencia diferenciadora para MLE actualizados."},
+{n:32,type:"toefl",title:"TOEFL Structure: Clauses of Purpose, Result & Concession",focus:"TOEFL ITP — Structure & Written Expression",teoria:`SUBORDINATING CONJUNCTIONS — CATEGORÍAS PARA EXAMEN:\n\nPURPOSE (para qué):\n• so that / in order that + [subject + can/could/may/might]\n• "The model was regularized so that it would generalize better."\n• ≠ "so that + would" cuando el sujeto es el mismo → usar "in order to + infinitive"\n\nRESULT (tanto que):\n• so + adj/adv + that: "The model was so accurate that deployment was approved."\n• such + noun phrase + that: "It was such a large dataset that preprocessing took 48 hours."\n\nCONCESSION (aunque):\n• Although / Even though / While + [complete clause]\n• Despite / In spite of + [noun phrase or gerund] — NO full clause\n  WRONG: "Despite that the data was noisy..." → Despite the noisy data / Despite noise\n• Nevertheless / However → connect independent clauses (use semicolon or new sentence)\n\nTRAMPA: "Despite of" → NO EXISTE en inglés. Siempre "Despite [noun]"`,search:`"TOEFL ITP subordinating conjunctions despite although result clause" | "concession clauses despite although difference TOEFL"`,toefl:"'Despite of' es uno de los errores más frecuentes de candidatos avanzados en Written Expression. Eliminarlo solo vale 1-2 puntos seguros.",ml:"'Although the model performs well in-distribution, it struggles with tail cases' — la estructura de concesión es esencial para comunicar matices técnicos."},
+{n:33,type:"ml",title:"STAR Stories: Building Your ML Interview Story Bank",focus:"ML Engineering — Interview Prep / Behavioral",teoria:`BANK DE 5 HISTORIAS STAR PARA ML:\nPrepara y memoriza UNA historia para cada categoría:\n\n1. TECHNICAL CHALLENGE: "A model that underperformed and how you fixed it"\n   → S: imbalanced dataset, 95% majority class\n   → T: improve recall on minority class without sacrificing precision\n   → A: SMOTE + class weights + PR-AUC as primary metric\n   → R: recall increased 40% with <2% precision drop\n\n2. COLLABORATION/DISAGREEMENT: "Tech decision you disagreed with"\n   → Frame: "I respectfully pushed back because the data showed..."\n\n3. FAILURE/LEARNING: "A model that failed in production"\n   → Frame: "The root cause was training-serving skew; I implemented..."\n\n4. AMBIGUITY: "An ML problem with unclear requirements"\n   → Frame: "I ran a scoping workshop to align on the metric..."\n\n5. IMPACT AT SCALE: "Your most impactful ML project"\n   → Always quantify: "This reduced [cost/latency] by X% / served Y users"\n\nPRACTICE: Graba en voz alta cada historia. Target: 90-120 segundos por historia, sin "ums".`,search:`"ML engineer behavioral interview STAR method stories examples" | "machine learning engineer tell me about yourself answer"`,toefl:"La estructura STAR (Situation → Task → Action → Result) entrena la narración causal secuencial — la misma lógica que los pasajes de causa-efecto del TOEFL.",ml:"Tener 5 historias STAR memorized y pulidas significa que en la entrevista destinas energía cognitiva a adaptarlas, no a construirlas desde cero bajo presión."},
+{n:34,type:"toefl",title:"TOEFL Reading: Process of Elimination — Advanced Application",focus:"TOEFL ITP — Reading Comprehension",teoria:`ELIMINACIÓN AVANZADA — LOS 5 TIPOS DE DISTRACTOR:\n\n1. TOO EXTREME: usa "always", "never", "all", "completely"\n   → Pasajes académicos hedgean. Si la respuesta no hedgea, desconfía.\n\n2. TOO NARROW: menciona solo un detalle del párrafo, no la idea principal\n   → Para preguntas de Main Idea, esto es trampa segura\n\n3. TOO BROAD: va más allá de lo que el pasaje cubre\n   → "The author implies that all ML models are biased" — pasaje solo discute uno\n\n4. OPPOSITE: invierte la relación del texto\n   → Frecuente en cause-effect: el efecto se presenta como causa\n\n5. OUT OF SCOPE: correcto en el mundo real pero no mencionado en el texto\n   → REGLA DE ORO: si no está en el pasaje, no existe para el ITP\n\nCUANDO QUEDAN 2 OPCIONES VIABLES:\n→ La más específica, más hedgeada, y más cercana al texto = correcta`,search:`"TOEFL ITP reading process of elimination wrong answer types" | "TOEFL reading distractor analysis technique advanced"`,toefl:"Reconocer los 5 tipos de distractor convierte las preguntas difíciles de Reading en ejercicios de clasificación. Reduce errores en un 30-40% en pasajes difíciles.",ml:"Esta mentalidad de 'eliminación activa' es la misma que un MLE usa al debuggear: descartar hipótesis sistemáticamente hasta identificar la causa raíz."},
+{n:35,type:"review",title:"Full TOEFL ITP Mock Exam (Timed, Conditions Reales)",focus:"Review — Full Mock TOEFL ITP",teoria:`MOCK EXAM COMPLETO — 115 MIN EXACTOS:\n\nCONDICIONES:\n• Sin pausa. Sin diccionario. Sin notas previas.\n• Simula el orden real del ITP\n\nORDEN REAL DEL TOEFL ITP:\n1. Listening Comprehension: 30-40 min\n   - Part A: ~30 short dialogues\n   - Part B: ~8 long conversations\n   - Part C: ~3 lectures\n\n2. Structure & Written Expression: 25 min\n   - Structure: 15 items\n   - Written Expression: 25 items\n\n3. Reading Comprehension: 55 min\n   - 5 passages, ~10 questions each\n\nSCORING PBI (Scaled Score):\n• Each section: 31-68\n• Total ITP: 310-677\n• C1 target: 543+ (approx. based on CEFR mapping)\n\nPOST-MOCK PROTOCOL:\n1. Score each section\n2. Error log: categorize each wrong answer\n3. Pattern ID: which section / question type dominates errors?\n4. Week 6 adjustment: double time on weakest area`,search:`"TOEFL ITP free full practice test PDF with audio" | "TOEFL ITP complete practice test Longman Barron's"`,toefl:"Un mock timed completo es el único indicador real de tu puntaje actual. Sin él, el estudio es cualitativo — con él, es cuantitativo.",ml:"La capacidad de rendir bajo presión de tiempo es también lo que diferencia a candidatos en entrevistas live coding y design challenges."}
+]},
+{title:"Semana 6 — Días 36–42: Error Correction & Advanced Refinement",days:[
+{n:36,type:"toefl",title:"TOEFL Structure: Comparative & Superlative Structures in Academic Writing",focus:"TOEFL ITP — Structure & Written Expression",teoria:`COMPARATIVES — PATRONES ACADÉMICOS:\n\nREGULAR:\n• 1-2 syllables: faster, simpler, larger\n• 3+ syllables: more accurate, more efficient, more robust\n\nIRREGULAR (memorizar):\n• good → better → best | bad → worse → worst\n• far → further (degree) / farther (distance) → furthest/farthest\n• little → less → least | many/much → more → most\n\nTRAMPAS EN WRITTEN EXPRESSION:\n1. Double comparative: "more faster" → "faster"\n2. Illogical comparison: "The accuracy of Model A is higher than Model B."\n   → ERROR: comparas accuracy con model. FIX: "...higher than that of Model B."\n3. Superlative + present perfect: "X is the most accurate model [that] has ever been proposed."\n4. "As...as" negativos: "not as accurate as" (no "not so accurate as" — less formal)\n\nACADEMIC PATTERNS:\n"X outperforms Y by a significant margin."\n"X is comparable to / on par with Y in terms of accuracy."`,search:`"TOEFL ITP comparative superlative written expression traps" | "illogical comparison TOEFL structure section examples"`,toefl:"La comparación ilógica ('accuracy de A > model B') es una trampa sofisticada que aparece exactamente en los ítems de dificultad alta del Written Expression.",ml:"'Our model outperforms the baseline by 3.2% on NDCG@10, comparable to state-of-the-art on this benchmark' — las comparaciones precisas son el estándar de los papers y las presentaciones técnicas."},
+{n:37,type:"ml",title:"Technical English Writing: Documentation, READMEs & Technical Proposals",focus:"ML Engineering — Technical Communication",teoria:`PRINCIPIOS DE ESCRITURA TÉCNICA SENIOR:\n\nREADME STRUCTURE (GitHub estándar):\n1. One-line description (what it does)\n2. Quick start (3 commands max)\n3. Architecture overview (diagram link)\n4. Configuration & parameters\n5. Contributing guidelines\n\nTECHNICAL PROPOSAL STRUCTURE:\nProblem Statement → Current State → Proposed Approach → Expected Impact → Risks & Mitigations → Timeline\n\nVOCABULARIO TÉCNICO PRECISO:\n• "leverage" (usar estratégicamente) → prefer "use" — 'leverage' is overused\n• "utilize" → prefer "use" unless technical context requires distinction\n• "implement" vs. "develop" vs. "deploy" — no son sinónimos\n• "ensure" vs. "guarantee" — en ML, casi nunca se puede guarantee\n• "significant" → always quantify: "significant (p < 0.05)" or "significant (>10% improvement)"\n\nACTIVE VOICE IN TECHNICAL WRITING:\n"We train the model" → clearer than "The model is trained by us"\nBUT: "The model was evaluated on three benchmarks" → passive is fine (agent = obvious)`,search:`"technical writing machine learning documentation best practices" | "ML README technical proposal writing English senior"`,toefl:"Los principios de escritura precisa y sin ambigüedad son exactamente lo que el TOEFL testea en sus pasajes — los buenos autores académicos siguen las mismas reglas.",ml:"La calidad de tu documentación escrita es visible para el equipo antes de conocerte. Para roles remotos internacionales, es una primera impresión crítica."},
+{n:38,type:"toefl",title:"TOEFL Listening: Full Part C — Extended Lectures Strategy",focus:"TOEFL ITP — Listening Comprehension",teoria:`PART C MASTERY — EXTENDED LECTURES:\n\nTEMÁTICAS FRECUENTES EN ITP PART C:\n• Ciencias naturales (biología evolutiva, ecología, geología)\n• Historia y ciencias sociales (arqueología, psicología)\n• Procesos científicos (cómo funciona X)\n\nSECUENCIA DE ESCUCHA ÓPTIMA:\n1. Escucha activamente el TÓPICO y PUNTO PRINCIPAL (primeros 15 seg)\n2. Anota con símbolos: → * ≠ ↑↓ ?\n3. Cuando escuches "For example" → anota E en vez del detalle completo\n4. Cuando escuches "However/But" → anota CONTRASTE\n5. Presta máxima atención a la oración final — suele ser la conclusión preguntada\n\nPREGUNTAS TÍPICAS PART C:\n• "What is the lecture mainly about?" → Topic from first 15 sec\n• "According to the professor, why does X occur?" → Cause from body\n• "What can be inferred about Y?" → Conclusion or implication\n• "What does the professor say about Z?" → Detail — busca en notas\n\nMETAL MODEL: Trátalo como tomar notas en una conferencia real, no como un dictado.`,search:`"TOEFL ITP Part C listening lecture strategy academic topics" | "TOEFL listening Part C extended talks practice audio"`,toefl:"La Part C del Listening es donde se gana o pierde la sección completa. Practicar con TED-Ed Science videos a 1.0x + tomar notas con tu sistema entrena el mismo formato.",ml:"Preparar presentaciones técnicas claras para audiencias mixtas (técnicos + PMs) usa exactamente las mismas habilidades de síntesis de información densa."},
+{n:39,type:"ml",title:"Cultural Fit & Values-Based Questions in International Tech Interviews",focus:"ML Engineering — Interview Prep / Cultural Fit",teoria:`PREGUNTAS DE VALORES MÁS FRECUENTES EN TECH REMOTE:\n\n"How do you handle working across time zones?"\nR: "I default to async-first communication — I document decisions in writing, use tools like Notion/Confluence, and batch synchronous time for high-bandwidth discussions. I've found that being timezone-aware actually forces better documentation practices."\n\n"How do you stay current in ML?"\nR: "I follow [specific sources: Papers With Code, Hugging Face blog, arXiv cs.LG]. I implement at least one paper per quarter on a side project. I also contribute to [community/open source]."\n— Always name specifics. Never "I read articles."\n\n"Describe your ideal team culture."\nR: "I thrive in teams with high psychological safety — where dissent is welcomed and decisions are documented. I value async-first cultures where outcomes matter over hours logged."\n\n"Why remote / why international?"\nR: "I believe the best teams are built around talent and alignment, not geography. I've found that remote-first culture tends to produce stronger written communication and documentation practices."\n\nKEY: Welcome to the Jungle audiences: European/French companies value directness + cultural awareness + work-life balance respect.`,search:`"cultural fit interview questions tech company remote international" | "Welcome to the Jungle interview tips European tech company"`,toefl:"La capacidad de responder con estructuras complejas, precisas y fluidas en tiempo real — que el TOEFL testea indirectamente — es lo que diferencia una respuesta memorizada de una convincente.",ml:"Las preguntas de cultural fit en plataformas como WTTJ son tan importantes como las técnicas para empresas que hacen hiring remoto. Tu respuesta dice cómo serás como compañero de equipo async."},
+{n:40,type:"toefl",title:"TOEFL Structure: Complex Sentence Patterns — All Traps Review",focus:"TOEFL ITP — Structure & Written Expression",teoria:`REVISIÓN INTEGRADA — 10 TRAMPAS PRIORITARIAS:\n\n1. PARALLEL: "X, Y, and Z" — same grammatical form\n2. SVA INVERSION: "There are [plural]" / intervening phrases\n3. EACH/ONE: + plural noun + singular verb\n4. WHICH vs. THAT: non-restrictive vs. restrictive\n5. EMBEDDED QUESTION ORDER: "I wonder what [S+V] is" (not "what is")\n6. WOULD in if-clause: NEVER\n7. GERUND after preposition: "by training", "after deploying"\n8. PASSIVE stative: consist/contain/include → no passive\n9. DESPITE + noun: never "despite of" / never "despite that"\n10. ILLOGICAL COMPARISON: "accuracy of A > that of B" (not "> B")\n\nDRILL FORMAT:\nPara cada trampa: escribe 1 error example + 1 corrected version en tu cuaderno\nLuego haz 5 ítems de práctica de esa trampa específica`,search:`"TOEFL ITP Structure Written Expression all rules review" | "TOEFL structure 40 traps common errors practice"`,toefl:"La revisión integrada antes del examen debe ser activa (escribir ejemplos) no pasiva (releer). El cuaderno externaliza el esfuerzo cognitivo y refuerza la memoria muscular.",ml:"Este nivel de atención al detalle y corrección sistemática es exactamente el mindset que se espera en code review y en la validación de pipelines de datos."},
+{n:41,type:"ml",title:"Mock Technical Interview — Live Coding + System Design Simulation",focus:"ML Engineering — Full Interview Simulation",teoria:`SIMULACRO COMPLETO ML INTERVIEW (60 min):\n\n[0-5 min] INTRODUCCIÓN:\nPractica en voz alta: "Tell me about yourself" — versión ML Engineer\nEstructura: Current role → Key ML expertise → Why this company → Impact\nTarget: 90 segundos, sin notas\n\n[5-20 min] TECHNICAL QUESTION:\nElige una: "Explain how you would build a fraud detection system"\nO: "Walk me through how BERT's attention mechanism works"\nUsa: Concept → Analogy → Technical Detail → Trade-off\n\n[20-40 min] SYSTEM DESIGN:\n"Design the ML system for a news recommendation engine"\nUsa: Requirements → Data → Model → Serving → Monitoring\nHabla mientras diseñas. Verbalizar el razonamiento ES el examen.\n\n[40-55 min] BEHAVIORAL (STAR x2):\n• "Tell me about a time you improved a model's performance significantly."\n• "Describe a technical disagreement you had and how you resolved it."\n\n[55-60 min] PREGUNTAS AL ENTREVISTADOR (practica 3 preguntas):\n• "What does the ML infrastructure look like today?"\n• "How does the team evaluate model impact on business metrics?"\n• "What's the biggest technical challenge the ML team faces right now?"`,search:`"ML engineer full interview simulation mock 2024" | "machine learning system design interview walkthrough YouTube"`,toefl:"Hablar en inglés técnico durante 60 min seguidos con fluidez y precisión es el objetivo dual: lo que el TOEFL mide indirectamente y lo que la entrevista exige directamente.",ml:"Hacer este simulacro grabado y escucharte te da el feedback más honesto posible. Identifica: ¿Dónde pierdes fluidez? ¿Dónde tu vocabulario técnico falla?"},
+{n:42,type:"review",title:"Week 6 Review: Error Log Analysis + Targeted Drilling",focus:"Review — Targeted Error Correction",teoria:`ANÁLISIS DE ERROR LOG — SEMANAS 1-6:\n\nPASO 1: Revisa todos tus mocks y ejercicios\nClasifica cada error en una tabla:\n\n| Sección | Tipo de trampa | # errores | Semana detectado |\n|---------|---------------|-----------|------------------|\n| Structure | SVA con inversión | 4 | Sem 1-3 |\n| Reading | Inference/implication | 6 | Sem 2-5 |\n| Listening | Attitude/function | 3 | Sem 4-6 |\n\nPASO 2: Ranking de trampas por frecuencia\nTus TOP 3 errores = 100% de tu foco en la Semana 7\n\nPASO 3: ML Interview Gap Analysis\n• ¿Qué preguntas te generan más ansiedad?\n• ¿Dónde pierdes fluidez o precisión?\n• ¿Cuál de las 5 historias STAR sigue sintiéndose no natural?\n\nPASO 4: Prepara plan de ataque para los últimos 3 días`,search:`"TOEFL error analysis improvement strategy" | "how to analyze TOEFL practice test mistakes"`,toefl:"El análisis de errores sistemático convierte la práctica random en progreso medible. Sin él, se pueden cometer los mismos errores en semana 7 que en semana 1.",ml:"El post-mortem y la retrospectiva estructurada — el mismo proceso que usas aquí — son herramientas fundamentales de equipos de ML de alto rendimiento."}
+]},
+{title:"Semana Final — Días 43–45: Peak Performance & Exam Readiness",days:[
+{n:43,type:"toefl",title:"Day 43: Full TOEFL ITP Mock + Error Pattern Final Review",focus:"TOEFL ITP — Full Timed Mock",teoria:`PROTOCOLO DÍA 43 — MOCK FINAL:\n\n[0-45 min] FULL TIMED MOCK (si no hiciste uno completo el día 35):\nO si ya tienes score del día 35 → foco en sección débil:\n• Si Listening es débil: 3 lectures + 2 conversation sets ITP\n• Si Structure es débil: 40 ítems con todos los patrones de trampa\n• Si Reading es débil: 2 pasajes académicos densos + análisis de cada opción incorrecta\n\n[45-60 min] REVISIÓN DE ERRORES DEL MOCK:\nPara cada error:\n1. ¿Qué tipo de trampa fue? (nombra la categoría)\n2. ¿En qué momento del proceso cometiste el error? (velocidad / distractor / falta de regla)\n3. ¿Cuál es la regla correcta? Escríbela en el cuaderno\n\nMENTAL STATE PREP:\n"En este punto, ya domino los patrones. El examen testea lo que ya sé.\nMi trabajo ahora es ejecutar con calma y velocidad, no aprender cosas nuevas."`,search:`"TOEFL ITP full practice test free audio 2024" | "TOEFL ITP practice test Longman complete PDF download"`,toefl:"El día 43 es el último diagnóstico cuantitativo. Lo que descubras aquí define exactamente las 2 horas que le dedicas al día 44.",ml:"La mentalidad de 'yo ya sé esto, ahora ejecuto' es la misma que necesitas en el día de una entrevista importante."},
+{n:44,type:"ml",title:"Day 44: Interview Final Drill — Your 5 STAR Stories + System Design",focus:"ML Engineering — Final Interview Simulation",teoria:`PROTOCOLO DÍA 44 — INTERVIEW PEAK:\n\n[0-20 min] STAR STORIES FINAL RUN:\nNarra en voz alta las 5 historias STAR SIN NOTAS\n• Graba en audio o video\n• Evalúa: ¿Duran 90-120 seg? ¿Cuantificas el resultado? ¿El vocabulario técnico es preciso?\n\n[20-35 min] TECHNICAL VOCABULARY SPEED DRILL:\nDe memoria, sin notas, define en una oración:\n• precision vs. recall | AUC-ROC | training-serving skew\n• RAG | LoRA | concept drift | feature store | canary deployment\nPráctica el ritmo: estas deben salir en < 15 segundos cada una\n\n[35-55 min] SYSTEM DESIGN WHITEBOARD:\nElige un prompt y diseña EN VOZ ALTA completo:\n"Design an anomaly detection system for financial transactions"\nUSA EL FRAMEWORK: Requirements → Data → Model → Serving → Monitoring\n\n[55-60 min] PREGUNTAS PARA EL ENTREVISTADOR:\nPrepara y practica 4 preguntas inteligentes\n"What metrics do you use to evaluate model impact on business outcomes?"\n"How does the team balance research and production work?"`,search:`"ML engineer interview final preparation day before" | "machine learning system design practice problems list"`,toefl:"La fluidez en vocabulario técnico que practicas aquí también activa las estructuras gramaticales que el TOEFL mide — el inglés preciso es uno.",ml:"El día antes de la entrevista NO es para aprender nada nuevo. Es para consolidar, ejecutar con confianza y dormir bien."},
+{n:45,type:"review",title:"Day 45: Integration Day — Mindset, Strategy & Launch",focus:"Review — Peak Readiness + Integration",teoria:`DÍA 45 — INTEGRACIÓN FINAL:\n\n[0-15 min] LECTURA Y REFLEXIÓN ACTIVA:\nRelée tu cuaderno completo de 45 días. Haz una lista de:\n• Las 5 reglas gramaticales que más veces te salvaron\n• Los 3 tipos de pregunta que antes eran difíciles y ahora son triviales\n• Tu vocabulario ML favorito que sientes más natural\n\n[15-35 min] REVISIÓN ESTRATÉGICA EXAMEN ITP:\n• Sección Listening: primeras 10 preguntas son fáciles → 100% accuracy target\n• Sección Structure: speed es clave → 40 ítems en 25 min = ~37 seg/ítem\n• Sección Reading: 11 min/pasaje → si un pasaje es difícil, no te atasques\n\n[35-55 min] REVISIÓN ESTRATÉGICA ENTREVISTA:\n• Primeros 2 min de "tell me about yourself" = set the tone\n• Preguntas que no sabes → "Great question. Let me think through that..." (no silencio)\n• System design → habla primero requirements, nunca saltarse al modelo\n• Cierre → siempre ten 3 preguntas preparadas\n\n[55-60 min] CARTA A TI MISMO:\nEscribe en inglés (5-7 oraciones) lo que este programa te dio.\nEsto activa el retrieval de lo aprendido y cierra el ciclo cognitivo.\n\n---\nADELANTE. Tienes el sistema. Ahora ejecuta.`,search:`"TOEFL ITP exam day strategy tips" | "ML engineer interview day before tips remote job"`,toefl:"El día 45 no es para aprender — es para integrar. La confianza no viene de aprender más, sino de saber exactamente qué ya sabes.",ml:"El verdadero diferenciador Senior no es saber más que otros, sino comunicar con más claridad, más precisión, y más confianza lo que ya sabes."}
+]}
+];
 
-  document.addEventListener('mousemove', e => {
-    mx = e.clientX; my = e.clientY;
-    dot.style.transform = `translate(${mx}px, ${my}px) translate(-50%,-50%)`;
-  });
-
-  function lerpCursor() {
-    rx += (mx - rx) * 0.12;
-    ry += (my - ry) * 0.12;
-    ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%,-50%)`;
-    requestAnimationFrame(lerpCursor);
-  }
-  lerpCursor();
-
-  document.querySelectorAll('a, button, .v-card, .fw-card, .whitepaper-card').forEach(el => {
-    el.addEventListener('mouseenter', () => {
-      ring.style.width  = '48px';
-      ring.style.height = '48px';
-      ring.style.borderColor = 'rgba(20,184,166,0.7)';
-      dot.style.transform = `translate(${mx}px, ${my}px) translate(-50%,-50%) scale(0)`;
-    });
-    el.addEventListener('mouseleave', () => {
-      ring.style.width  = '30px';
-      ring.style.height = '30px';
-      ring.style.borderColor = 'rgba(20,184,166,0.4)';
-      dot.style.transform = `translate(${mx}px, ${my}px) translate(-50%,-50%) scale(1)`;
-    });
-  });
-
-  /* ── SCROLL REVEAL ── */
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-      }
-    });
-  }, { threshold: 0.12 });
-
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-  /* ── NAV SCROLL ── */
-  window.addEventListener('scroll', () => {
-    const nav = document.querySelector('nav');
-    if (window.scrollY > 60) {
-      nav.style.background = 'rgba(10,15,30,0.92)';
-    } else {
-      nav.style.background = 'rgba(10,15,30,0.7)';
-    }
-  });
-
-  /* ── MOBILE NAV ── */
-  function toggleMobileNav() {
-    document.getElementById('mobile-nav').classList.toggle('open');
-  }
-  function closeMobileNav() {
-    document.getElementById('mobile-nav').classList.remove('open');
-  }
-
-  /* ── FORM SUBMIT ── */
-  function handleSubmit(btn) {
-    btn.textContent = 'Inquiry Received — We\'ll be in touch.';
-    btn.style.background = 'var(--accent-d)';
-    btn.style.pointerEvents = 'none';
-    btn.style.opacity = '0.7';
-  }
+let currentWeek=0;
+function renderNav(){
+const nav=document.getElementById('nav');
+nav.innerHTML='';
+weeks.forEach((w,i)=>{
+const b=document.createElement('button');
+b.className='week-btn'+(i===currentWeek?' active':'');
+b.textContent=`Semana ${i+1}`;
+if(i===6) b.textContent='Final';
+b.onclick=()=>{currentWeek=i;renderWeek();renderNav();updateProgress()};
+nav.appendChild(b);
+});
+}
+function typeBadge(type){
+if(type==='toefl') return '<span class="badge b-toefl">TOEFL ITP</span>';
+if(type==='ml') return '<span class="badge b-ml">ML Engineering</span>';
+return '<span class="badge b-review">Review / Mock</span>';
+}
+function renderWeek(){
+const c=document.getElementById('days-container');
+c.innerHTML='';
+const w=weeks[currentWeek];
+const wh=document.createElement('div');
+wh.className='week-header';
+wh.textContent=w.title;
+c.appendChild(wh);
+w.days.forEach(d=>{
+const card=document.createElement('div');
+card.className='day-card';
+card.innerHTML=`<div class="day-top"><span class="day-num">Día ${d.n}</span>${typeBadge(d.type)}<span class="day-title">${d.title}</span><i class="ti ti-chevron-down" style="font-size:16px;color:var(--color-text-tertiary);margin-left:auto" aria-hidden="true"></i></div>
+<div class="day-body">
+<div class="field"><div class="field-label">Enfoque del día</div><div class="field-val">${d.focus}</div></div>
+<div class="field"><div class="field-label">Teoría clave para el cuaderno</div><div class="field-val" style="white-space:pre-wrap;font-family:var(--font-mono);font-size:12px;background:var(--color-background-secondary);padding:10px 12px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary)">${d.teoria}</div></div>
+<div class="field"><div class="field-label">Búsqueda sugerida (YouTube / Web)</div><div class="field-val">${d.search.split(' | ').map(s=>`<span class="search-tag">${s}</span>`).join('')}</div></div>
+<div class="dual">
+<div class="dual-box"><div class="field-label" style="color:#3C3489">Valor TOEFL ITP</div><div class="field-val" style="font-size:12px">${d.toefl}</div></div>
+<div class="dual-box"><div class="field-label" style="color:#085041">Valor ML Engineering</div><div class="field-val" style="font-size:12px">${d.ml}</div></div>
+</div>
+</div>`;
+card.querySelector('.day-top').onclick=()=>{card.classList.toggle('expanded')};
+c.appendChild(card);
+});
+}
+function updateProgress(){
+const total=weeks.length;
+const pct=Math.round(((currentWeek)/total)*100);
+document.getElementById('prog-fill').style.width=pct+'%';
+const labels=['Semana 1 de 7','Semana 2 de 7','Semana 3 de 7','Semana 4 de 7','Semana 5 de 7','Semana 6 de 7','Semana final'];
+document.getElementById('prog-label').textContent=labels[currentWeek]||'';
+}
+renderNav();
+renderWeek();
+updateProgress();
 </script>
-</body>
-</html>
